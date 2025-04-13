@@ -16,7 +16,7 @@ public class AuthController(SyContext context, AuthService authService, HashServ
 
     [HttpPost]
     [Route("api/auth/login")]
-    public IActionResult Login([FromBody] RequestLogin requestLogin)
+    public IActionResult Login([FromForm] RequestLogin requestLogin)
     {
         if (requestLogin.Login == null || requestLogin.Password == null)
         {
