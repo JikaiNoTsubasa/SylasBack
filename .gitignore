@@ -1,0 +1,7 @@
+appsettings*.json
+
+sylas-api/obj/
+
+sylas-api/bin/
+
+Migrations/

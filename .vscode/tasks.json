@@ -1,0 +1,30 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "01 - Migration Add",
+            "type": "shell",
+            "command": "dotnet",
+            "args" : ["ef", "migrations", "add", "${input:migration_name}", "--project", "sylas-api", "-v"],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "02 - Migration Apply",
+            "type": "shell",
+            "command": "dotnet",
+            "args" : ["ef", "database", "update", "--project", "sylas-api", "-v"],
+            "problemMatcher": "$msCompile"
+        }
+    ],
+    // ========== INPUTS ========================
+    "inputs": [
+    // ----- ef ------
+    {
+      "id": "migration_name",
+      "type": "promptString",
+      "description": "Migration Name"
+    }
+  ]
+}
