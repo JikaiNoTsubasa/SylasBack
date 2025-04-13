@@ -10,5 +10,10 @@
   "AllowedHosts": "*",
   "ConnectionStrings": {
     "Default": "host=xxx; database=xxx; username=xxx; password=xxx"
+  },
+  "Jwt": {
+    "Key": "key256",
+    "Issuer": "sylas_api",
+    "Audience": "sylas_api"
   }
 }
