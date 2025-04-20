@@ -9,4 +9,9 @@ public abstract class Entity
 
     public DateTime? CreatedDate { get; set; }
     public long? CreatedBy { get; set; }
+
+    public void MarkCreated(long userId){
+        CreatedDate = DateTime.UtcNow;
+        CreatedBy = userId;
+    }
 }

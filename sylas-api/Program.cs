@@ -78,14 +78,19 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 
+// Init default data
+log.Info("Init default data");
 using var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<SyContext>();
 var admin = context.Users.FirstOrDefault(u => u.Email == "stephane.biehler.priv@gmail.com");
 if (admin == null)
 {
+    log.Info("Init default admin");
     var hashService = scope.ServiceProvider.GetRequiredService<HashService>();    
     var password = hashService.HashPassword("test");
-    context.Users.Add(new User { Email = "stephane.biehler.priv@gmail.com", Password = password, Username = "Jikai" });
+    var user = new User { Email = "stephane.biehler.priv@gmail.com", Password = password, Name = "Jikai" };
+    user.MarkCreated(0);
+    context.Users.Add(user);
     context.SaveChanges();
 }
 
