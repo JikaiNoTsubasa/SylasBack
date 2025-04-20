@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using sylas_api.Exceptions;
 
 namespace sylas_api.Global;
 
@@ -10,6 +11,8 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         var statusCode = exception switch
         {
+            SyEntitiyNotFoundException => StatusCodes.Status404NotFound,
+            SyException => StatusCodes.Status500InternalServerError,
             ArgumentException => StatusCodes.Status400BadRequest,
             UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
             _ => 500
