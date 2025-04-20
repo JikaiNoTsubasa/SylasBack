@@ -14,6 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddLog4Net("log4net.config");
 
+// Exception handler
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 ILog log = LogManager.GetLogger(typeof(Program));
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -61,6 +64,7 @@ var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseExceptionHandler();
 
 // Disable CORS
 app.UseCors(x => x
