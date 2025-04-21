@@ -20,7 +20,7 @@ public class AuthService
     {
         var claims = new[]
         {
-            new Claim("nameid", user.Id.ToString()),
+            new Claim("userid", user.Id.ToString()),
             new Claim("email", user.Email),
             new Claim("username", user.Name)
         };
