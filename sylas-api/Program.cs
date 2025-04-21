@@ -35,8 +35,8 @@ builder.Services.AddScoped<UserManager>();
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options => {
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-        options.SerializerSettings.DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore;
+        // options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.;
+        // options.SerializerSettings.DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore;
         options.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
         options.SerializerSettings.Converters.Add(new StringEnumConverter());
         });
@@ -105,6 +105,10 @@ if (admin == null)
     context.Users.Add(user);
     context.SaveChanges();
 }
+
+// Init global parameters
+log.Info("Init global parameters");
+SyProjectInit.InitGlobalParameters(context);
 
 log.Info("Sylas API started");
 app.Run();

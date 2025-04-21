@@ -15,6 +15,7 @@ public class SyContext(DbContextOptions<SyContext> options) : DbContext(options)
     public DbSet<Milestone> Milestones { get; set; }
     public DbSet<IssueActivity> IssueActivities { get; set; }
     public DbSet<Quest> Quests { get; set; }
+    public DbSet<GlobalParameter> GlobalParameters { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

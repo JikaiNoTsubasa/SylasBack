@@ -3,6 +3,7 @@ using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using sylas_api.Database;
+using sylas_api.Global;
 using sylas_api.JobModels.AuthModel;
 using sylas_api.Services;
 
@@ -35,7 +36,9 @@ public class AuthController(SyContext context, AuthService authService, HashServ
             return BadRequest();
         }
 
-        var token = _authService.GenerateToken(user);
+        string expirationHours = _context.GlobalParameters.FirstOrDefault(p => p.Name.Equals(SyApplicationConstants.PARAM_BEARER_EXPIRATION_HOURS))?.Value ?? "1";
+
+        var token = _authService.GenerateToken(user, int.Parse(expirationHours));
         return StatusCode(StatusCodes.Status200OK, new ResponseLogin { Token = token });
         
     }

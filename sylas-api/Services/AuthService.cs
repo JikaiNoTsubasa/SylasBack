@@ -16,7 +16,7 @@ public class AuthService
         _config = config;
     }
 
-    public string GenerateToken(User user)
+    public string GenerateToken(User user, int expiredInHours = 2)
     {
         var claims = new[]
         {
@@ -32,7 +32,7 @@ public class AuthService
             issuer: _config["Jwt:Issuer"],
             audience: _config["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddHours(2),
+            expires: DateTime.UtcNow.AddHours(expiredInHours),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
