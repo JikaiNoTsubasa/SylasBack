@@ -1,4 +1,5 @@
 using System;
+using Microsoft.EntityFrameworkCore;
 using sylas_api.Database;
 using sylas_api.Database.Models;
 using sylas_api.Exceptions;
@@ -10,8 +11,11 @@ namespace sylas_api.JobManagers;
 
 public class ProjectManager(SyContext context) : SyManager(context)
 {
+
+    private IQueryable<Project> GetProjects(){ return _context.Projects.Include(p => p.Owner).Include(p => p.Customer); }
+
     public ApiResult FetchProjectsFiltered(QueryableEx.Pagination? pagination, QueryableEx.SearchQuery? search, QueryableEx.OrderQuery? order){
-        List<ResponseProject> projects = [.. _context.Projects
+        List<ResponseProject> projects = [.. GetProjects()
             .Where(p => !p.IsDeleted)
             .Search(search, u => u.Name)
             .OrderBy(order, "name", u => u.Name)
@@ -19,8 +23,10 @@ public class ProjectManager(SyContext context) : SyManager(context)
             .Select(u => u.ToDTO())];
         return new ApiResult { Content = projects, Meta = meta, HttpCode = StatusCodes.Status200OK };
     }
+
+    public Project FetchProject(long id){ return GetProjects().FirstOrDefault(p => p.Id == id) ?? throw new SyEntitiyNotFoundException($"Could not find project {id}"); }
     
-    public Project CreateProject(string name, long? ownerId, long? customerId, long createdBy){
+    public Project CreateProject(string name, long createdBy, long? ownerId = null, long? customerId = null){
         Project project = new(){
             Name = name,
         };
@@ -32,6 +38,8 @@ public class ProjectManager(SyContext context) : SyManager(context)
         }
         if (customerId != null) project.CustomerId = customerId.Value;
         project.MarkCreated(createdBy);
+        _context.Projects.Add(project);
+        _context.SaveChanges();
         return project;
     }
 

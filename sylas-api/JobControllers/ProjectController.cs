@@ -21,12 +21,23 @@ public class ProjectController(SyContext context, ProjectManager projectManager)
         return Return(_projectManager.FetchProjectsFiltered(_pagination, _search, _orderby));
     }
 
+    [HttpGet]
+    [Route("api/project/{id}")]    
+    public IActionResult FetchProject([FromRoute] long id){
+        var res = new ApiResult(){ Content = _projectManager.FetchProject(id).ToDTO(), HttpCode = StatusCodes.Status200OK };
+        return Return(res);
+    }
+
     [HttpPost]
     [Route("api/project")]
     public IActionResult CreateProject([FromForm] RequestCreateProject model){
         ApiResult res = new(){
             HttpCode = StatusCodes.Status201Created,
-            Content = _projectManager.CreateProject(model.Name, _loggedUserId, model.CustomerId, _loggedUserId).ToDTO(),
+            Content = _projectManager.CreateProject(
+                name: model.Name,
+                createdBy:_loggedUserId,
+                customerId:model.CustomerId,
+                ownerId: model.OwnerId).ToDTO(),
         };
         return Return(res);
     }

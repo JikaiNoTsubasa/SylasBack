@@ -11,7 +11,7 @@ public class Project : Entity
     public List<Issue>? Issues { get; set; }
     public ProjectStatus Status { get; set; } = ProjectStatus.ACTIVE;
     [ForeignKey(nameof(Customer))]
-    public long CustomerId { get; set; }
+    public long? CustomerId { get; set; }
     public Customer? Customer { get; set; }
 
     public List<Document>? Documents { get; set; }
