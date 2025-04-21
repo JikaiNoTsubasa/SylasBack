@@ -84,10 +84,10 @@ public static class QueryableEx
                 likePattern = Expression.Constant(pattern.ToLower());
             }
 
-            var likeMethod = typeof(DbFunctionsExtensions).GetMethod(nameof(DbFunctionsExtensions.Like), new[]
-            {
+            var likeMethod = typeof(DbFunctionsExtensions).GetMethod(nameof(DbFunctionsExtensions.Like),
+            [
                 typeof(DbFunctions), typeof(string), typeof(string)
-            })!;
+            ])!;
 
             var efFunctions = Expression.Property(null, typeof(EF), nameof(EF.Functions));
             var likeCall = Expression.Call(likeMethod, efFunctions, toSearch!, likePattern);

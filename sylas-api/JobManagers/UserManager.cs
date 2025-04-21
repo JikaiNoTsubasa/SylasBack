@@ -19,6 +19,7 @@ public class UserManager(SyContext context, HashService hashService) : SyManager
 
     public ApiResult FetchUsersFiltered(QueryableEx.Pagination? pagination, QueryableEx.SearchQuery? search, QueryableEx.OrderQuery? order){
         List<ResponseUser> users = [.. _context.Users
+            .Where(u => !u.IsDeleted)
             .Search(search, u => u.Name, u=> u.Email)
             .OrderBy(order, "name", u => u.Name)
             .Paged(pagination, out var meta)

@@ -1,5 +1,6 @@
 using System;
 using sylas_api.Database.Models;
+using sylas_api.JobModels.ProjectModel;
 using sylas_api.JobModels.UserModel;
 
 namespace sylas_api.JobModels;
@@ -7,19 +8,47 @@ namespace sylas_api.JobModels;
 public static class DTOHelper
 {
 #region User
-    public static ResponseUser ToDTO(this User user)
+    public static ResponseUser ToDTO(this User model)
     {
         return new()
         {
-            Id = user.Id,
-            Name = user.Name,
-            Email = user.Email,
-            XPBackEnd = user.XPBackEnd,
-            XPFrontEnd = user.XPFrontEnd,
-            XPTests = user.XPTests,
-            LevelBackEnd = user.LevelBackEnd,
-            LevelFrontEnd = user.LevelFrontEnd,
-            LevelTests = user.LevelTests
+            Id = model.Id,
+            Name = model.Name,
+            Email = model.Email,
+            XPBackEnd = model.XPBackEnd,
+            XPFrontEnd = model.XPFrontEnd,
+            XPTests = model.XPTests,
+            LevelBackEnd = model.LevelBackEnd,
+            LevelFrontEnd = model.LevelFrontEnd,
+            LevelTests = model.LevelTests,
+            Avatar = model.Avatar,
+            Street = model.Street,
+            City = model.City,
+            Zipcode = model.Zipcode,
+            Country = model.Country,
+            CreatedDate = model.CreatedDate,
+            UpdatedDate = model.UpdatedDate,
+            DeletedDate = model.DeletedDate,
+            CreatedBy = model.CreatedBy,
+            UpdatedBy = model.UpdatedBy,
+            DeletedBy = model.DeletedBy
+        };
+    }
+#endregion
+
+#region Project
+    public static ResponseProject ToDTO(this Project model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            Name = model.Name,
+            CreatedDate = model.CreatedDate,
+            UpdatedDate = model.UpdatedDate,
+            DeletedDate = model.DeletedDate,
+            CreatedBy = model.CreatedBy,
+            UpdatedBy = model.UpdatedBy,
+            DeletedBy = model.DeletedBy
         };
     }
 #endregion
