@@ -35,7 +35,8 @@ public class ProjectManager(SyContext context) : SyManager(context)
             .OrderBy(order, "name", u => u.Name)
             .Paged(pagination, out var meta)
             .Select(u => u.ToDTO())];
-        return FetchProjectsFiltered(pagination, search, order); 
+
+        return new ApiResult { Content = projects, Meta = meta, HttpCode = StatusCodes.Status200OK };
     }
 
     public ApiResult FetchProjectsFiltered(QueryableEx.Pagination? pagination, QueryableEx.SearchQuery? search, QueryableEx.OrderQuery? order){
