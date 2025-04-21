@@ -55,7 +55,7 @@ public class UserController(SyContext context, UserManager userManager) : SyCont
     [HttpPatch]
     [Route("api/user/{id}")]    
     public IActionResult UpdateUser([FromRoute] long id, [FromForm] RequestUpdateUser model){
-        User user = _userManager.UpdateUser(id, model.Email, model.Name, model.Password, model.Avatar, model.Street, model.City, model.Zipcode, model.Country);
+        User user = _userManager.UpdateUser(id, _loggedUserId, model.Email, model.Name, model.Password, model.Avatar, model.Street, model.City, model.Zipcode, model.Country);
         var res = new ApiResult(){ Content = user.ToDTO(), HttpCode = StatusCodes.Status200OK };
         return Return(res);
     }

@@ -48,7 +48,7 @@ public class UserManager(SyContext context, HashService hashService) : SyManager
         return user;
     }
 
-    public User UpdateUser(long userId, string? email, string? name, string? password, string? avatar, string? street, string? city, string? zipcode, string? country){
+    public User UpdateUser(long userId,long updatedBy, string? email, string? name, string? password, string? avatar, string? street, string? city, string? zipcode, string? country){
         User user = FetchUser(userId);
         if (email != null) user.Email = email;
         if (name != null) user.Name = name;
@@ -58,6 +58,7 @@ public class UserManager(SyContext context, HashService hashService) : SyManager
         if (city != null) user.City = city;
         if (zipcode != null) user.Zipcode = zipcode;
         if (country != null) user.Country = country;
+        user.MarkUpdated(updatedBy);
         _context.SaveChanges();
         return user;
     }
