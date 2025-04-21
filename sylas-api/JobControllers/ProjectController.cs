@@ -22,6 +22,12 @@ public class ProjectController(SyContext context, ProjectManager projectManager)
     }
 
     [HttpGet]
+    [Route("api/myprojects")]
+    public IActionResult FetchMyProjects(){
+        return Return(_projectManager.FetchMyProjectsFiltered(_loggedUserId,_pagination, _search, _orderby));
+    }
+
+    [HttpGet]
     [Route("api/project/{id}")]    
     public IActionResult FetchProject([FromRoute] long id){
         var res = new ApiResult(){ Content = _projectManager.FetchProject(id).ToDTO(), HttpCode = StatusCodes.Status200OK };
