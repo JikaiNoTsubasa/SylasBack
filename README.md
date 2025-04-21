@@ -4,7 +4,7 @@ Back api for Sylas
 # Licensing
 
 License - Personal and Non-Commercial Use Only
-Copyright (c) 2025 Ostermann Luke
+Copyright (c) 2025 BIEHLER HERTZOG Stéphane
 
 This software is provided free of charge for personal, non-commercial, and non-professional use only.
 
