@@ -1,11 +1,14 @@
 using System.Text;
 using log4net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Converters;
 using sylas_api.Database;
 using sylas_api.Database.Models;
 using sylas_api.Global;
+using sylas_api.JobControllers;
+using sylas_api.JobManagers;
 using sylas_api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +19,7 @@ builder.Logging.AddLog4Net("log4net.config");
 
 // Exception handler
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails(); // Required
 
 ILog log = LogManager.GetLogger(typeof(Program));
 
@@ -23,6 +27,11 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<HashService>();
 builder.Services.AddDbContext<SyContext>();
+
+// Add managers and controllers
+builder.Services.AddScoped<SyManager>();
+builder.Services.AddScoped<UserManager>();
+
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options => {
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
@@ -31,7 +40,6 @@ builder.Services.AddControllers()
         options.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
         options.SerializerSettings.Converters.Add(new StringEnumConverter());
         });
-
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -61,10 +69,10 @@ builder.Services.AddAuthorization();
 
 
 var app = builder.Build();
+app.UseExceptionHandler();
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseExceptionHandler();
 
 // Disable CORS
 app.UseCors(x => x

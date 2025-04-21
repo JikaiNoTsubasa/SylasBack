@@ -12,6 +12,7 @@ public class GlobalExceptionHandler : IExceptionHandler
         var statusCode = exception switch
         {
             SyEntitiyNotFoundException => StatusCodes.Status404NotFound,
+            SyBadRequest => StatusCodes.Status400BadRequest,
             SyException => StatusCodes.Status500InternalServerError,
             ArgumentException => StatusCodes.Status400BadRequest,
             UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
@@ -21,7 +22,7 @@ public class GlobalExceptionHandler : IExceptionHandler
         var problemDetails = new ProblemDetails
         {
             Title = exception.Message,
-            Detail = exception.StackTrace,
+            Detail = exception.Message,
             Status = statusCode,
             Type = exception.GetType().Name,
             Instance = httpContext.Request.Path

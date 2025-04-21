@@ -15,9 +15,20 @@ public class UserController(SyContext context, UserManager userManager) : SyCont
 
     [HttpGet]
     [Route("api/user/{id}")]
-    public IActionResult GetUser([FromRoute] long id){
+    public IActionResult FetchUser([FromRoute] long id){
         var res = new ApiResult(){
             Content = UserManager.GetUser(id).ToDTO(),
+            HttpCode = StatusCodes.Status200OK
+        };
+
+        return Return(res);
+    }
+
+    [HttpGet]
+    [Route("api/user/me")]
+    public IActionResult FetchMyUser(){
+        var res = new ApiResult(){
+            Content = UserManager.GetUser(_loggedUserId).ToDTO(),
             HttpCode = StatusCodes.Status200OK
         };
 
