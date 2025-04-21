@@ -15,6 +15,11 @@ public class User : Entity
     public int LevelBackEnd { get; set; } = 0;
     public int LevelTests { get; set; } = 0;
 
+    public string? Street { get; set; }
+    public string? City { get; set; }
+    public string? Zipcode { get; set; }
+    public string? Country { get; set; }
+
     public List<Role>? Roles { get; set; }
 
     public List<Customer>? Customers { get; set; }

@@ -28,6 +28,8 @@ public class SyContext(DbContextOptions<SyContext> options) : DbContext(options)
 
         modelBuilder.Entity<User>().HasMany(u=>u.Customers).WithMany(c=>c.Members);
         modelBuilder.Entity<User>().HasMany(u=>u.Quests).WithOne(c=>c.Assignee);
+        modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+
         modelBuilder.Entity<Project>().HasOne(u=>u.Owner).WithMany(p=>p.OwningProjects);
         modelBuilder.Entity<Project>().HasMany(p=>p.Issues).WithOne(i=>i.Project);
         modelBuilder.Entity<Project>().HasOne(p=>p.Customer).WithMany(c=>c.Projects);
