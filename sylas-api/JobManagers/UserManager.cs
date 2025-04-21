@@ -2,6 +2,9 @@ using System;
 using sylas_api.Database;
 using sylas_api.Database.Models;
 using sylas_api.Exceptions;
+using sylas_api.Global;
+using sylas_api.JobModels;
+using sylas_api.JobModels.UserModel;
 using sylas_api.Services;
 
 namespace sylas_api.JobManagers;
@@ -12,6 +15,15 @@ public class UserManager(SyContext context, HashService hashService) : SyManager
 
     public List<User> FetchUsers(){
         return [.. _context.Users];
+    }
+
+    public ApiResult FetchUsersFiltered(QueryableEx.Pagination? pagination, QueryableEx.SearchQuery? search, QueryableEx.OrderQuery? order){
+        List<ResponseUser> users = [.. _context.Users
+            .Search(search, u => u.Name, u=> u.Email)
+            .OrderBy(order, "name", u => u.Name)
+            .Paged(pagination, out var meta)
+            .Select(u => u.ToDTO())];
+        return new ApiResult { Content = users, Meta = meta, HttpCode = StatusCodes.Status200OK };
     }
 
     public User FetchUser(long userId){

@@ -18,8 +18,7 @@ public class UserController(SyContext context, UserManager userManager) : SyCont
     [HttpGet]
     [Route("api/users")]
     public IActionResult FetchUsers(){
-        var res = new ApiResult(){ Content = _userManager.FetchUsers().Select(u => u.ToDTO()), HttpCode = StatusCodes.Status200OK };
-        return Return(res);
+        return Return(_userManager.FetchUsersFiltered(_pagination, _search, _orderby));
     }
 
     [HttpGet]
