@@ -1,5 +1,6 @@
 using System;
 using sylas_api.Database.Models;
+using sylas_api.Global;
 using sylas_api.JobModels.ProjectModel;
 using sylas_api.JobModels.UserModel;
 
@@ -21,6 +22,9 @@ public static class DTOHelper
             LevelBackEnd = model.LevelBackEnd,
             LevelFrontEnd = model.LevelFrontEnd,
             LevelTests = model.LevelTests,
+            XpPercentFrontEnd = Engine.GetCurrentLevelXpPercent(model.LevelFrontEnd, model.XPFrontEnd),
+            XpPercentBackEnd = Engine.GetCurrentLevelXpPercent(model.LevelBackEnd, model.XPBackEnd),
+            XpPercentTests = Engine.GetCurrentLevelXpPercent(model.LevelTests, model.XPTests),
             Avatar = model.Avatar,
             Street = model.Street,
             City = model.City,

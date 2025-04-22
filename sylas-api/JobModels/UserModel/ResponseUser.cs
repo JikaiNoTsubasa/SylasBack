@@ -11,6 +11,9 @@ public record ResponseUser : ResponseEntity
     public int LevelFrontEnd { get; set; } = 0;
     public int LevelBackEnd { get; set; } = 0;
     public int LevelTests { get; set; } = 0;
+    public int XpPercentFrontEnd { get; set; }
+    public int XpPercentBackEnd { get; set; }
+    public int XpPercentTests { get; set; }
 
     public string? Street { get; set; }
     public string? City { get; set; }
