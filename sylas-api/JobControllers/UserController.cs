@@ -43,6 +43,14 @@ public class UserController(SyContext context, UserManager userManager) : SyCont
         return Return(res);
     }
 
+    [HttpPatch]
+    [Route("api/user/me")]
+    public IActionResult UpdateMyUser([FromForm] RequestUpdateUser model){
+        User user = _userManager.UpdateUser(_loggedUserId, _loggedUserId, model.Email, model.Name, model.Password, model.Avatar, model.Street, model.City, model.Zipcode, model.Country);
+        var res = new ApiResult(){ Content = user.ToDTO(), HttpCode = StatusCodes.Status200OK };
+        return Return(res);
+    }
+
     [HttpPost]
     [Route("api/user")]
     public IActionResult CreateUser([FromForm] RequestCreateUser model){
