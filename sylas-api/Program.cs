@@ -32,6 +32,7 @@ builder.Services.AddDbContext<SyContext>();
 builder.Services.AddScoped<SyManager>();
 builder.Services.AddScoped<UserManager>();
 builder.Services.AddScoped<ProjectManager>();
+builder.Services.AddScoped<TimeManager>();
 
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options => {

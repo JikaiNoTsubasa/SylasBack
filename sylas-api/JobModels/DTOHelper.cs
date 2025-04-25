@@ -2,6 +2,7 @@ using System;
 using sylas_api.Database.Models;
 using sylas_api.Global;
 using sylas_api.JobModels.ProjectModel;
+using sylas_api.JobModels.TimeModel;
 using sylas_api.JobModels.UserModel;
 
 namespace sylas_api.JobModels;
@@ -48,6 +49,25 @@ public static class DTOHelper
             Id = model.Id,
             Name = model.Name,
             Owner = model.Owner?.ToDTO(),
+            CreatedDate = model.CreatedDate,
+            UpdatedDate = model.UpdatedDate,
+            DeletedDate = model.DeletedDate,
+            CreatedBy = model.CreatedBy,
+            UpdatedBy = model.UpdatedBy,
+            DeletedBy = model.DeletedBy
+        };
+    }
+#endregion
+
+#region Time
+    public static ResponseTime ToDTO(this DayTime model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            User = model.User?.ToDTO()!,
+            Date = model.Date,
+            Minutes = model.Minutes,
             CreatedDate = model.CreatedDate,
             UpdatedDate = model.UpdatedDate,
             DeletedDate = model.DeletedDate,

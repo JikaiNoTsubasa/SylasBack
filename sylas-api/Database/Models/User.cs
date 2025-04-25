@@ -25,4 +25,5 @@ public class User : Entity
     public List<Customer>? Customers { get; set; }
     public List<Project>? OwningProjects { get; set; }
     public List<Quest>? Quests { get; set; }
+    public List<DayTime>? Times { get; set; }
 }
