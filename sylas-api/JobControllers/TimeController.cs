@@ -26,6 +26,12 @@ public class TimeController(SyContext context, TimeManager timeManager) : SyCont
     }
 
     [HttpGet]
+    [Route("api/time/me/info")]
+    public IActionResult GetMyTimeInfo(){
+        return Return(new ApiResult(){Content = _timeManager.GetMyTimeInfo(_loggedUserId), HttpCode = StatusCodes.Status200OK});
+    }
+
+    [HttpGet]
     [Route("api/time/me/latest")]
     public IActionResult FetchMyLatestTimes(){
         return Return(new ApiResult(){ Content = _timeManager.FetchMyLatestTimes(_loggedUserId), HttpCode = StatusCodes.Status200OK }); 

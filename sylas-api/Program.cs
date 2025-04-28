@@ -34,7 +34,9 @@ builder.Services.AddScoped<UserManager>();
 builder.Services.AddScoped<ProjectManager>();
 builder.Services.AddScoped<TimeManager>();
 
-builder.Services.AddControllers()
+builder.Services.AddControllers(o => {
+        o.ModelBinderProviders.Insert(0, new UTCDateTimeBinderProvider());
+    })
     .AddNewtonsoftJson(options => {
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
         // options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.;
