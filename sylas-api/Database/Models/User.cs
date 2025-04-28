@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sylas_api.Database.Models;
 
@@ -26,4 +27,6 @@ public class User : Entity
     public List<Project>? OwningProjects { get; set; }
     public List<Quest>? Quests { get; set; }
     public List<DayTime>? Times { get; set; }
+
+    public Preferences? Preferences { get; set; }
 }

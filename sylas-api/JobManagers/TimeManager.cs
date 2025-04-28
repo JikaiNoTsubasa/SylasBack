@@ -1,8 +1,10 @@
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using sylas_api.Database;
 using sylas_api.Database.Models;
+using sylas_api.Exceptions;
 using sylas_api.JobModels.TimeModel;
 
 namespace sylas_api.JobManagers;
@@ -21,11 +23,13 @@ public class TimeManager(SyContext context) : SyManager(context)
         _context.SaveChanges();
     }
 
-    public List<DayTime> FetchMyLatestTimes(long userId){ 
-        return [.. _context.Times.Where(t => t.UserId == userId).OrderByDescending(t => t.Date).Take(10)];
+    public List<DayTime> FetchMyLatestTimes(long userId){
+        User user = _context.Users.Include(u => u.Preferences).FirstOrDefault(u => u.Id == userId) ?? throw new SyEntitiyNotFoundException($"User {userId} not found");
+        return [.. _context.Times.Where(t => t.UserId == userId).OrderByDescending(t => t.Date).Take(user.Preferences?.TimeHistory ?? 10)];
     }
 
     public ResponseMyTimeInfo GetMyTimeInfo(long userId){
+        User user = _context.Users.Include(u => u.Preferences).FirstOrDefault(u => u.Id == userId) ?? throw new SyEntitiyNotFoundException($"User {userId} not found");
         var times = _context.Times.Where(t => t.UserId == userId);
 
         DateTime currentDate = DateTime.Today;
@@ -40,7 +44,7 @@ public class TimeManager(SyContext context) : SyManager(context)
             .GroupBy(t => new { t.Date.Year, t.Date.Month })
             .Select(g => new ResponseTotalByMonth { Year = g.Key.Year, Month = g.Key.Month, Total = (int)g.Sum(t => t.Minutes) })
             .OrderBy(g => g.Year).ThenBy(g => g.Month)
-            .Take(12)];
+            .Take(user.Preferences?.TimeChartMonth ?? 12)];
 
         return new(){
             TotalTimeBalance = total,

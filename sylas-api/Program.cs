@@ -110,6 +110,10 @@ if (admin == null)
     context.SaveChanges();
 }
 
+// Init user preferences
+log.Info("Init user preferences");
+SyProjectInit.InitUserPreferences(context);
+
 // Init global parameters
 log.Info("Init global parameters");
 SyProjectInit.InitGlobalParameters(context);

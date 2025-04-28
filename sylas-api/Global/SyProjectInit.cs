@@ -1,5 +1,6 @@
 using System;
 using log4net;
+using Microsoft.EntityFrameworkCore;
 using sylas_api.Database;
 using sylas_api.Database.Models;
 
@@ -35,6 +36,19 @@ public class SyProjectInit
             log.Debug($"Parameter {parameterName} created");
         }else{
             log.Debug($"Parameter {parameterName} has value {parameterValue}");
+        }
+    }
+
+    public static void InitUserPreferences(SyContext context){
+        // For each users, create default preferences
+        foreach (User user in context.Users.Include(u => u.Preferences).ToList()){
+            if (user.Preferences == null){
+                user.Preferences = new Preferences
+                {
+                    Name = $"Default preferences for {user.Name}"
+                };
+                context.SaveChanges();
+            }
         }
     }
 }

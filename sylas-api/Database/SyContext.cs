@@ -17,6 +17,8 @@ public class SyContext(DbContextOptions<SyContext> options) : DbContext(options)
     public DbSet<Quest> Quests { get; set; }
     public DbSet<DayTime> Times { get; set; }
     public DbSet<GlobalParameter> GlobalParameters { get; set; }
+    public DbSet<Document> Documents { get; set; }
+    public DbSet<Preferences> Preferences { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,6 +33,7 @@ public class SyContext(DbContextOptions<SyContext> options) : DbContext(options)
         modelBuilder.Entity<User>().HasMany(u=>u.Quests).WithOne(c=>c.Assignee);
         modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
         modelBuilder.Entity<User>().HasMany(u => u.Times).WithOne(t => t.User);
+        modelBuilder.Entity<User>().HasOne(u => u.Preferences).WithOne(p => p.User).OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Project>().HasOne(u=>u.Owner).WithMany(p=>p.OwningProjects);
         modelBuilder.Entity<Project>().HasMany(p=>p.Issues).WithOne(i=>i.Project);
