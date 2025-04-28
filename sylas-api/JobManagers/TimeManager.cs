@@ -30,12 +30,24 @@ public class TimeManager(SyContext context) : SyManager(context)
 
         DateTime currentDate = DateTime.Today;
 
+        int totalEntries = times.Count();
         int monthTotal = (int)times.Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month).Sum(t => t.Minutes);
         int total = (int)times.Sum(t => t.Minutes);
+        float average = times.Average(t => t.Minutes);
+
+        // Get total by month
+        List<ResponseTotalByMonth> totalByMonth = [.. times
+            .GroupBy(t => new { t.Date.Year, t.Date.Month })
+            .Select(g => new ResponseTotalByMonth { Year = g.Key.Year, Month = g.Key.Month, Total = (int)g.Sum(t => t.Minutes) })
+            .OrderBy(g => g.Year).ThenBy(g => g.Month)
+            .Take(12)];
 
         return new(){
             TotalTimeBalance = total,
-            MonthTimeBalance = monthTotal
+            TotalEntries = totalEntries,
+            MoyBalance = average,
+            MonthTimeBalance = monthTotal,
+            TotalByMonth = totalByMonth
         };
     }
 }
