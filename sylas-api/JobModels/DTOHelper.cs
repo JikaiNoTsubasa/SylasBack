@@ -1,6 +1,7 @@
 using System;
 using sylas_api.Database.Models;
 using sylas_api.Global;
+using sylas_api.JobModels.PreferenceModel;
 using sylas_api.JobModels.ProjectModel;
 using sylas_api.JobModels.TimeModel;
 using sylas_api.JobModels.UserModel;
@@ -20,17 +21,39 @@ public static class DTOHelper
             XPBackEnd = model.XPBackEnd,
             XPFrontEnd = model.XPFrontEnd,
             XPTests = model.XPTests,
+            XPManagement = model.XPManagement,
             LevelBackEnd = model.LevelBackEnd,
             LevelFrontEnd = model.LevelFrontEnd,
             LevelTests = model.LevelTests,
+            LevelManagement = model.LevelManagement,
             XpPercentFrontEnd = Engine.GetCurrentLevelXpPercent(model.LevelFrontEnd, model.XPFrontEnd),
             XpPercentBackEnd = Engine.GetCurrentLevelXpPercent(model.LevelBackEnd, model.XPBackEnd),
             XpPercentTests = Engine.GetCurrentLevelXpPercent(model.LevelTests, model.XPTests),
+            XpPercentManagement = Engine.GetCurrentLevelXpPercent(model.LevelManagement, model.XPManagement),
+            Preferences = model.Preferences?.ToDTO(),
             Avatar = model.Avatar,
             Street = model.Street,
             City = model.City,
             Zipcode = model.Zipcode,
             Country = model.Country,
+            CreatedDate = model.CreatedDate,
+            UpdatedDate = model.UpdatedDate,
+            DeletedDate = model.DeletedDate,
+            CreatedBy = model.CreatedBy,
+            UpdatedBy = model.UpdatedBy,
+            DeletedBy = model.DeletedBy
+        };
+    }
+#endregion
+
+#region Preference
+    public static ResponsePreference ToDTO(this Preferences model)
+    {
+        return new(){
+            Id = model.Id,
+            Name = model.Name,
+            TimeHistory = model.TimeHistory,
+            TimeChartMonth = model.TimeChartMonth,
             CreatedDate = model.CreatedDate,
             UpdatedDate = model.UpdatedDate,
             DeletedDate = model.DeletedDate,

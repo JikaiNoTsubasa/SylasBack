@@ -12,9 +12,12 @@ public class User : Entity
     public int XPFrontEnd { get; set; } = 0;
     public int XPBackEnd { get; set; } = 0;
     public int XPTests { get; set; } = 0;
+    public int XPManagement { get; set; } = 0;
+
     public int LevelFrontEnd { get; set; } = 0;
     public int LevelBackEnd { get; set; } = 0;
     public int LevelTests { get; set; } = 0;
+    public int LevelManagement { get; set; } = 0;
 
     public string? Street { get; set; }
     public string? City { get; set; }

@@ -1,4 +1,5 @@
 using System;
+using Microsoft.EntityFrameworkCore;
 using sylas_api.Database;
 using sylas_api.Database.Models;
 using sylas_api.Exceptions;
@@ -29,7 +30,7 @@ public class UserManager(SyContext context, HashService hashService) : SyManager
 
     public User FetchUser(long userId){
         if (userId <= 0) throw new SyBadRequest($"Trying to get user {userId}");
-        return _context.Users.FirstOrDefault(u => u.Id == userId) ?? throw new SyEntitiyNotFoundException($"User {userId} not found");
+        return _context.Users.Include(u => u.Preferences).FirstOrDefault(u => u.Id == userId) ?? throw new SyEntitiyNotFoundException($"User {userId} not found");
     }
 
     public User CreateUser(
