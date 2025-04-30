@@ -37,7 +37,7 @@ public class TimeManager(SyContext context) : SyManager(context)
         int totalEntries = times.Count();
         int monthTotal = (int)times.Where(t => t.Date.Year == currentDate.Year && t.Date.Month == currentDate.Month).Sum(t => t.Minutes);
         int total = (int)times.Sum(t => t.Minutes);
-        float average = times.Average(t => t.Minutes);
+        float average = !times.Any() ? 0 : times.Average(t => t.Minutes);
 
         // Get total by month
         List<ResponseTotalByMonth> totalByMonth = [.. times
