@@ -3,12 +3,26 @@ using log4net;
 using Microsoft.EntityFrameworkCore;
 using sylas_api.Database;
 using sylas_api.Database.Models;
+using sylas_api.Services;
 
 namespace sylas_api.Global;
 
 public class SyProjectInit
 {
     private static readonly ILog log = LogManager.GetLogger(typeof(SyProjectInit));
+
+    public static void CreateAdminIfNotExist(SyContext context, HashService hashService){
+        // Check if admin exists
+        if (!context.Users.Any()){
+            log.Info("Init default admin");   
+            var password = hashService.HashPassword("test");
+            var user = new User { Email = "stephane.biehler.priv@gmail.com", Password = password, Name = "Jikai" };
+            user.MarkCreated(0);
+            context.Users.Add(user);
+            context.SaveChanges();
+            log.Debug($"Admin {user.Name} created");
+        }
+    }
 
     public static void InitGlobalParameters(SyContext context){
         // Create param Bearer expirancy
@@ -49,6 +63,19 @@ public class SyProjectInit
                 };
                 context.SaveChanges();
             }
+        }
+    }
+
+    public static void InitDefaultCustomers(SyContext context){
+        // Create default customer
+        if (!context.Customers.Any(c => c.Name.Equals("Personal"))){
+            Customer customer = new()
+            {
+                Name = "Personal"
+            };
+            context.Customers.Add(customer);
+            context.SaveChanges();
+            log.Debug($"Customer {customer.Name} created");
         }
     }
 }

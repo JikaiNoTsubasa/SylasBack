@@ -34,6 +34,7 @@ builder.Services.AddScoped<UserManager>();
 builder.Services.AddScoped<ProjectManager>();
 builder.Services.AddScoped<TimeManager>();
 builder.Services.AddScoped<PreferenceManager>();
+builder.Services.AddScoped<CustomerManager>();
 
 builder.Services.AddControllers(o => {
         o.ModelBinderProviders.Insert(0, new UTCDateTimeBinderProvider());
@@ -98,18 +99,12 @@ app.MapControllers();
 // Init default data
 log.Info("Init default data");
 using var scope = app.Services.CreateScope();
+var hashService = scope.ServiceProvider.GetRequiredService<HashService>();
 var context = scope.ServiceProvider.GetRequiredService<SyContext>();
-var admin = context.Users.FirstOrDefault(u => u.Email == "stephane.biehler.priv@gmail.com");
-if (admin == null)
-{
-    log.Info("Init default admin");
-    var hashService = scope.ServiceProvider.GetRequiredService<HashService>();    
-    var password = hashService.HashPassword("test");
-    var user = new User { Email = "stephane.biehler.priv@gmail.com", Password = password, Name = "Jikai" };
-    user.MarkCreated(0);
-    context.Users.Add(user);
-    context.SaveChanges();
-}
+
+// Init admin
+log.Info("Init admin");
+SyProjectInit.CreateAdminIfNotExist(context, hashService);
 
 // Init user preferences
 log.Info("Init user preferences");
@@ -118,6 +113,10 @@ SyProjectInit.InitUserPreferences(context);
 // Init global parameters
 log.Info("Init global parameters");
 SyProjectInit.InitGlobalParameters(context);
+
+// Init default customers
+log.Info("Init default customers");
+SyProjectInit.InitDefaultCustomers(context);
 
 log.Info("Sylas API started");
 app.Run();
