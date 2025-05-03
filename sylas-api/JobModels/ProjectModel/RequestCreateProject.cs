@@ -7,5 +7,6 @@ public record RequestCreateProject
     [Required]
     public string Name { get; set; } = null!;
     public long? CustomerId { get; set; }
+    public string? Description { get; set; }
     public long? OwnerId { get; set; }
 }

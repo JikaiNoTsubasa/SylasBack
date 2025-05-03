@@ -5,4 +5,5 @@ public record RequestUpdateProject
     public string? Name { get; set; }
     public long? CustomerId { get; set; }
     public long? OwnerId { get; set; }
+    public string? Description { get; set; }
 }

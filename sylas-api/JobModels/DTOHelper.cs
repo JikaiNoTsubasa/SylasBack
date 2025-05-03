@@ -72,6 +72,7 @@ public static class DTOHelper
             Id = model.Id,
             Name = model.Name,
             Owner = model.Owner?.ToDTO(),
+            Description = model.Description,
             CreatedDate = model.CreatedDate,
             UpdatedDate = model.UpdatedDate,
             DeletedDate = model.DeletedDate,

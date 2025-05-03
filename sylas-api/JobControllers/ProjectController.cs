@@ -43,6 +43,7 @@ public class ProjectController(SyContext context, ProjectManager projectManager)
                 name: model.Name,
                 createdBy:_loggedUserId,
                 customerId:model.CustomerId,
+                description: model.Description,
                 ownerId: model.OwnerId).ToDTO(),
         };
         return Return(res);
@@ -51,7 +52,7 @@ public class ProjectController(SyContext context, ProjectManager projectManager)
     [HttpPatch]
     [Route("api/project/{id}")]    
     public IActionResult UpdateProject([FromRoute] long id, [FromForm] RequestUpdateProject model){
-        Project project = _projectManager.UpdateProject(id, _loggedUserId, model.Name, model.OwnerId, model.CustomerId);
+        Project project = _projectManager.UpdateProject(id, _loggedUserId, model.Name, model.Description, model.OwnerId, model.CustomerId);
         var res = new ApiResult(){ Content = project.ToDTO(), HttpCode = StatusCodes.Status200OK };
         return Return(res);
     }

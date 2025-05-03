@@ -5,6 +5,7 @@ namespace sylas_api.Database.Models;
 
 public class Project : Entity
 {
+    public string? Description { get; set; }
     [ForeignKey(nameof(Owner))]
     public long OwnerId { get; set; }
     public User Owner { get; set; } = null!;
