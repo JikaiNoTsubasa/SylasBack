@@ -1,6 +1,7 @@
 using System;
 using sylas_api.Database.Models;
 using sylas_api.Global;
+using sylas_api.JobModels.GlobalParameterModel;
 using sylas_api.JobModels.PreferenceModel;
 using sylas_api.JobModels.ProjectModel;
 using sylas_api.JobModels.TimeModel;
@@ -98,6 +99,20 @@ public static class DTOHelper
             CreatedBy = model.CreatedBy,
             UpdatedBy = model.UpdatedBy,
             DeletedBy = model.DeletedBy
+        };
+    }
+#endregion
+
+#region GlobalParameter
+    public static ResponseGlobalParameter ToDTO(this GlobalParameter model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            Name = model.Name,
+            Value = model.Value,
+            Type = model.Type,
+            Description = model.Description
         };
     }
 #endregion

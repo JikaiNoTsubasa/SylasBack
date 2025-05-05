@@ -35,6 +35,7 @@ builder.Services.AddScoped<ProjectManager>();
 builder.Services.AddScoped<TimeManager>();
 builder.Services.AddScoped<PreferenceManager>();
 builder.Services.AddScoped<CustomerManager>();
+builder.Services.AddScoped<GlobalParameterManager>();
 
 builder.Services.AddControllers(o => {
         o.ModelBinderProviders.Insert(0, new UTCDateTimeBinderProvider());

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using sylas_api.Database;
 using sylas_api.Database.Models;
+using sylas_api.Exceptions;
 using sylas_api.Global;
 using sylas_api.JobManagers;
 using sylas_api.JobModels;
@@ -11,9 +12,10 @@ using sylas_api.JobModels.ProjectModel;
 namespace sylas_api.JobControllers;
 
 [Authorize]
-public class ProjectController(SyContext context, ProjectManager projectManager) : SyController(context)
+public class ProjectController(SyContext context, ProjectManager projectManager, GlobalParameterManager globalParameterManager) : SyController(context)
 {
     protected readonly ProjectManager _projectManager = projectManager;
+    protected readonly GlobalParameterManager _globalParameterManager = globalParameterManager;
 
     [HttpGet]
     [Route("api/projects")]
@@ -37,14 +39,47 @@ public class ProjectController(SyContext context, ProjectManager projectManager)
     [HttpPost]
     [Route("api/project")]
     public IActionResult CreateProject([FromForm] RequestCreateProject model){
-        ApiResult res = new(){
-            HttpCode = StatusCodes.Status201Created,
-            Content = _projectManager.CreateProject(
+        long userId = _loggedUserId;
+        Project prj =  _projectManager.CreateProject(
                 name: model.Name,
                 createdBy:_loggedUserId,
                 customerId:model.CustomerId,
                 description: model.Description,
-                ownerId: model.OwnerId).ToDTO(),
+                ownerId: model.OwnerId);
+
+        // Get creator user
+        User user = _context.Users.FirstOrDefault(u => u.Id == userId) ?? throw new SyEntitiyNotFoundException($"User {userId} not found");
+        int XpPercentBefore = Engine.GetCurrentLevelXpPercent(user.LevelManagement, user.XPManagement);
+        int XpBefore = user.XPManagement;
+        int LevelBefore = user.LevelManagement;
+
+        // Get parameter project xp
+        int xp = _globalParameterManager.GetParameterValue(SyApplicationConstants.PARAM_PROJECT_CREATE_XP, 40);
+
+        (int newLevel, int newXP) = Engine.AddXP(user.LevelManagement, user.XPManagement, xp);
+        int XpPercentAfter = Engine.GetCurrentLevelXpPercent(newLevel, newXP);
+        int XpAfter = newXP;
+        int LevelAfter = newLevel;
+
+        user.XPManagement = newXP;
+        user.LevelManagement = newLevel;
+        _context.SaveChanges();
+
+        ResponseCreateProject resp = new(){
+            ProjectId = prj.Id,
+            ProjectName = prj.Name,
+            XpPercentBefore = XpPercentBefore,
+            XpBefore = XpBefore,
+            LevelBefore = LevelBefore,
+            XpPercentAfter = XpPercentAfter,
+            XpAfter = XpAfter,
+            LevelAfter = LevelAfter,
+            XpGained = xp
+        };
+
+        ApiResult res = new(){
+            HttpCode = StatusCodes.Status201Created,
+            Content = resp
         };
         return Return(res);
     }

@@ -33,6 +33,15 @@ public class SyProjectInit
             "int",
             "Bearer token expiration in hours"
         );
+
+        // Create param Create Project XP
+        CreateParameterIfNotExist(
+            context,
+            SyApplicationConstants.PARAM_PROJECT_CREATE_XP,
+            "40",
+            "int",
+            "XP gained when creating a project"
+        );
     }
 
     public static void CreateParameterIfNotExist(SyContext context, string parameterName, string parameterValue, string parameterType, string? parameterDesc = null){
