@@ -73,7 +73,60 @@ public static class DTOHelper
             Id = model.Id,
             Name = model.Name,
             Owner = model.Owner?.ToDTO(),
+            Customer = model.Customer?.ToDTO(),
+            Issues = model.Issues?.Select(i => i.ToDTO()).ToList(),
+            IsDeleted = model.IsDeleted,
+            Status = model.Status,
             Description = model.Description,
+            CreatedDate = model.CreatedDate,
+            UpdatedDate = model.UpdatedDate,
+            DeletedDate = model.DeletedDate,
+            CreatedBy = model.CreatedBy,
+            UpdatedBy = model.UpdatedBy,
+            DeletedBy = model.DeletedBy
+        };
+    }
+
+    public static ResponseIssue ToDTO(this Issue model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            Name = model.Name,
+            GitlabTicket = model.GitlabTicket,
+            Complexity = model.Complexity,
+            DevelopmentTime = model.DevelopmentTime,
+            DueDate = model.DueDate,
+            IsDeleted = model.IsDeleted,
+            Labels = model.Labels?.Select(l => l.ToDTO()).ToList(),
+            Milestone = model.Milestone?.ToDTO(),
+            Priority = model.Priority,
+            Status = model.Status,
+            Description = model.Description,
+            CreatedDate = model.CreatedDate,
+            UpdatedDate = model.UpdatedDate,
+            DeletedDate = model.DeletedDate,
+            CreatedBy = model.CreatedBy,
+            UpdatedBy = model.UpdatedBy,
+            DeletedBy = model.DeletedBy
+        };
+    }
+
+    public static ResponseMilestone ToDTO(this Milestone model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            Name = model.Name
+        };
+    }
+
+    public static ResponseLabel ToDTO(this Label model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            Name = model.Name,
             CreatedDate = model.CreatedDate,
             UpdatedDate = model.UpdatedDate,
             DeletedDate = model.DeletedDate,
@@ -84,6 +137,22 @@ public static class DTOHelper
     }
 #endregion
 
+#region Customer
+    public static ResponseCustomer ToDTO(this Customer model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            Name = model.Name,
+            CreatedDate = model.CreatedDate,
+            UpdatedDate = model.UpdatedDate,
+            DeletedDate = model.DeletedDate,
+            CreatedBy = model.CreatedBy,
+            UpdatedBy = model.UpdatedBy,
+            DeletedBy = model.DeletedBy
+        };
+    }
+#endregion
 #region Time
     public static ResponseTime ToDTO(this DayTime model)
     {

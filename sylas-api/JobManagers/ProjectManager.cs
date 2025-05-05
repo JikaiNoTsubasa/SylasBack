@@ -57,7 +57,14 @@ public class ProjectManager(SyContext context) : SyManager(context)
         return new ApiResult { Content = projects, Meta = meta, HttpCode = StatusCodes.Status200OK };
     }
 
-    public Project FetchProject(long id){ return GetProjects().FirstOrDefault(p => p.Id == id) ?? throw new SyEntitiyNotFoundException($"Could not find project {id}"); }
+    public Project FetchProject(long id){ 
+        return GetProjects()
+            .Include(p => p.Issues)!.ThenInclude(i => i.Labels)
+            .Include(p => p.Issues)!.ThenInclude(i => i.Milestone)
+            .Include(p => p.Customer)
+            .FirstOrDefault(p => p.Id == id)
+            ?? throw new SyEntitiyNotFoundException($"Could not find project {id}"); 
+    }
     
     public Project CreateProject(string name, long createdBy, string? description = null, long? ownerId = null, long? customerId = null){
         Project project = new(){
