@@ -19,6 +19,8 @@ public class User : Entity
     public int LevelTests { get; set; } = 0;
     public int LevelManagement { get; set; } = 0;
 
+    public DateTime LastConnection { get; set; }
+
     public string? Street { get; set; }
     public string? City { get; set; }
     public string? Zipcode { get; set; }

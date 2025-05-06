@@ -7,14 +7,9 @@ using sylas_api.Database.Models;
 
 namespace sylas_api.Services;
 
-public class AuthService
+public class AuthService(IConfiguration config)
 {
-    private readonly IConfiguration _config;
-
-    public AuthService(IConfiguration config)
-    {
-        _config = config;
-    }
+    private readonly IConfiguration _config = config;
 
     public string GenerateToken(User user, int expiredInHours = 2)
     {

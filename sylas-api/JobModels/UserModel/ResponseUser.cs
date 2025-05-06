@@ -25,5 +25,7 @@ public record ResponseUser : ResponseEntity
     public string? Zipcode { get; set; }
     public string? Country { get; set; }
 
+    public DateTime LastConnection { get; set; }
+
     public ResponsePreference? Preferences { get; set; }
 }

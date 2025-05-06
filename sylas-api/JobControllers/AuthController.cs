@@ -40,6 +40,8 @@ public class AuthController(SyContext context, AuthService authService, HashServ
         string expirationHours = _context.GlobalParameters.FirstOrDefault(p => p.Name.Equals(SyApplicationConstants.PARAM_BEARER_EXPIRATION_HOURS))?.Value ?? "1";
 
         var token = _authService.GenerateToken(user, int.Parse(expirationHours));
+        user.LastConnection = DateTime.UtcNow;
+        _context.SaveChanges();
         return StatusCode(StatusCodes.Status200OK, new ResponseLogin { Token = token });
         
     }
