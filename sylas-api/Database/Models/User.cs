@@ -8,6 +8,7 @@ public class User : Entity
     public string Password { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string? Avatar { get; set; }
+    public bool CanLogin { get; set; } = true;
 
     public int XPFrontEnd { get; set; } = 0;
     public int XPBackEnd { get; set; } = 0;

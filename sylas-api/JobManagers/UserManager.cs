@@ -54,6 +54,7 @@ public class UserManager(SyContext context, HashService hashService) : SyManager
         if (city != null) user.City = city;
         if (zipcode != null) user.Zipcode = zipcode;
         if (country != null) user.Country = country;
+        user.CanLogin = true;
         user.MarkCreated(createdBy);
 
         _context.Users.Add(user);

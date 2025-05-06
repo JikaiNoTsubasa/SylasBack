@@ -33,6 +33,7 @@ public static class DTOHelper
             XpPercentManagement = Engine.GetCurrentLevelXpPercent(model.LevelManagement, model.XPManagement),
             Preferences = model.Preferences?.ToDTO(),
             LastConnection = model.LastConnection,
+            CanLogin = model.CanLogin,
             Avatar = model.Avatar,
             Street = model.Street,
             City = model.City,

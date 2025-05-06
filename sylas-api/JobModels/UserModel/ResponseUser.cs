@@ -26,6 +26,7 @@ public record ResponseUser : ResponseEntity
     public string? Country { get; set; }
 
     public DateTime LastConnection { get; set; }
+    public bool CanLogin { get; set; }
 
     public ResponsePreference? Preferences { get; set; }
 }

@@ -32,6 +32,11 @@ public class AuthController(SyContext context, AuthService authService, HashServ
             return BadRequest();
         }
 
+        if (user.CanLogin == false)
+        {
+            return Unauthorized();
+        }
+
         if (!_hashService.VerifyPassword(requestLogin.Password, user.Password))
         {
             return BadRequest();
