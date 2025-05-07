@@ -17,6 +17,7 @@ public class UserController(SyContext context, UserManager userManager) : SyCont
 
     [HttpGet]
     [Route("api/users")]
+    [Authorize(Policy = "User.ListAll")]
     public IActionResult FetchUsers(){
         return Return(_userManager.FetchUsersFiltered(_pagination, _search, _orderby));
     }
@@ -53,6 +54,7 @@ public class UserController(SyContext context, UserManager userManager) : SyCont
 
     [HttpPost]
     [Route("api/user")]
+    [Authorize(Policy = "User.Create")]
     public IActionResult CreateUser([FromForm] RequestCreateUser model){
         User user = _userManager.CreateUser(model.Email, model.Name, _loggedUserId, model.Password, model.Avatar, model.Street, model.City, model.Zipcode, model.Country);
         var res = new ApiResult(){ Content = user.ToDTO(), HttpCode = StatusCodes.Status201Created };
@@ -60,7 +62,8 @@ public class UserController(SyContext context, UserManager userManager) : SyCont
     }
 
     [HttpPatch]
-    [Route("api/user/{id}")]    
+    [Route("api/user/{id}")]
+    [Authorize(Policy = "User.Update")]
     public IActionResult UpdateUser([FromRoute] long id, [FromForm] RequestUpdateUser model){
         User user = _userManager.UpdateUser(id, _loggedUserId, model.Email, model.Name, model.Password, model.Avatar, model.Street, model.City, model.Zipcode, model.Country);
         var res = new ApiResult(){ Content = user.ToDTO(), HttpCode = StatusCodes.Status200OK };
@@ -69,6 +72,7 @@ public class UserController(SyContext context, UserManager userManager) : SyCont
 
     [HttpDelete]
     [Route("api/user/{id}")]
+    [Authorize(Policy = "User.Delete")]
     public IActionResult DeleteUser([FromRoute] long id){
         _userManager.DeleteUser(id, _loggedUserId);
         var res = new ApiResult(){ HttpCode = StatusCodes.Status200OK };

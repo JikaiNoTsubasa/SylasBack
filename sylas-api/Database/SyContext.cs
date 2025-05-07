@@ -8,6 +8,7 @@ public class SyContext(DbContextOptions<SyContext> options) : DbContext(options)
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
+    public DbSet<Grant> Grants { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Issue> Issues { get; set; }
@@ -29,11 +30,14 @@ public class SyContext(DbContextOptions<SyContext> options) : DbContext(options)
         modelBuilder.Entity<Entity>().HasKey(e => e.Id);
         modelBuilder.Entity<Entity>().Property(e => e.Id).ValueGeneratedOnAdd();
 
+        modelBuilder.Entity<User>().HasMany(u=>u.Roles).WithMany(c=>c.Users);
         modelBuilder.Entity<User>().HasMany(u=>u.Customers).WithMany(c=>c.Members);
         modelBuilder.Entity<User>().HasMany(u=>u.Quests).WithOne(c=>c.Assignee);
         modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
         modelBuilder.Entity<User>().HasMany(u => u.Times).WithOne(t => t.User);
         modelBuilder.Entity<User>().HasOne(u => u.Preferences).WithOne(p => p.User).OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Role>().HasMany(r=>r.Grants).WithMany(u=>u.Roles);
 
         modelBuilder.Entity<Project>().HasOne(u=>u.Owner).WithMany(p=>p.OwningProjects);
         modelBuilder.Entity<Project>().HasMany(p=>p.Issues).WithOne(i=>i.Project);

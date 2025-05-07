@@ -17,13 +17,15 @@ public class GlobalParameterController(SyContext context, GlobalParameterManager
 
     [HttpGet]
     [Route("api/globalparameters")]
+    [Authorize(Policy = "GP.ListAll")]
     public IActionResult FetchAllParameters()
     {
         return Return(new ApiResult(){ Content = _gpManager.FetchAllParameters().Select(p => p.ToDTO()).ToList(), HttpCode = StatusCodes.Status200OK });
     }
 
     [HttpPatch]
-    [Route("api/globalparameter/{id}")]    
+    [Route("api/globalparameter/{id}")]
+    [Authorize(Policy = "GP.Update")]
     public IActionResult UpdateParameter([FromRoute] long id, [FromForm] RequestUpdateGlobalParameter model){
         return Return(new ApiResult(){ Content = _gpManager.UpdateParameter(id, model.Name, model.Value, model.Type, model.Description).ToDTO(), HttpCode = StatusCodes.Status200OK });
     }

@@ -1,6 +1,7 @@
 using System.Text;
 using log4net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Converters;
@@ -36,6 +37,10 @@ builder.Services.AddScoped<TimeManager>();
 builder.Services.AddScoped<PreferenceManager>();
 builder.Services.AddScoped<CustomerManager>();
 builder.Services.AddScoped<GlobalParameterManager>();
+
+// Add policy management
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, GrantPolicyProvider>();
+builder.Services.AddScoped<IAuthorizationHandler, GrantHandler>();
 
 builder.Services.AddControllers(o => {
         o.ModelBinderProviders.Insert(0, new UTCDateTimeBinderProvider());
@@ -102,6 +107,19 @@ log.Info("Init default data");
 using var scope = app.Services.CreateScope();
 var hashService = scope.ServiceProvider.GetRequiredService<HashService>();
 var context = scope.ServiceProvider.GetRequiredService<SyContext>();
+
+// Init grants
+log.Info("Init grants");
+var allPolicies = PolicyScanner.GetAllPoliciesFromControllers(typeof(Program).Assembly);
+if (allPolicies != null && allPolicies.Count > 0){
+    SyProjectInit.InitGrants(context, allPolicies);
+}else{
+    log.Warn("No policies found");
+}
+
+// Init admin role
+log.Info("Init admin role");
+SyProjectInit.InitAdminRole(context);
 
 // Init admin
 log.Info("Init admin");

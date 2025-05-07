@@ -87,4 +87,39 @@ public class SyProjectInit
             log.Debug($"Customer {customer.Name} created");
         }
     }
+
+    public static void InitGrants(SyContext context, HashSet<string> policies){
+        // Create default grants
+        foreach (string policy in policies){
+            if (!context.Grants.Any(g => g.Key.Equals(policy))){
+                Grant grant = new()
+                {
+                    Key = policy
+                };
+                context.Grants.Add(grant);
+                context.SaveChanges();
+                log.Debug($"Grant {policy} created");
+            }
+        }
+    }
+
+    public static void InitAdminRole(SyContext context){
+        // Create admin role
+        if (!context.Roles.Any(r => r.UniqueKey.Equals("Admin"))){
+            Role role = new()
+            {
+                Name = "Admin",
+                UniqueKey = "Admin"
+            };
+            context.Roles.Add(role);
+            context.SaveChanges();
+            log.Debug($"Role {role.Name} created");
+
+        }
+        // Add all grants to Admin role
+        Role admin = context.Roles.Include(r => r.Grants).First(r => r.UniqueKey.Equals("Admin"));
+        admin.Grants = [.. context.Grants];
+        context.SaveChanges();
+        log.Debug($"Grants added to role {admin.Name}");
+    }
 }
