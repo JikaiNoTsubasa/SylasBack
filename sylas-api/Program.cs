@@ -37,6 +37,8 @@ builder.Services.AddScoped<TimeManager>();
 builder.Services.AddScoped<PreferenceManager>();
 builder.Services.AddScoped<CustomerManager>();
 builder.Services.AddScoped<GlobalParameterManager>();
+builder.Services.AddScoped<IssueManager>();
+builder.Services.AddScoped<QuestManager>();
 
 // Add policy management
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, GrantPolicyProvider>();

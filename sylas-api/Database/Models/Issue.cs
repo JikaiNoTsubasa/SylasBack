@@ -17,7 +17,7 @@ public class Issue : Entity
     public Priority Priority { get; set; } = Priority.LOW;
     public DateTime? DueDate { get; set; }
     [ForeignKey(nameof(Milestone))]
-    public long MilestoneId { get; set; }
+    public long? MilestoneId { get; set; }
     public Milestone? Milestone { get; set; }
     public string? Description { get; set; }
     public string? GitlabTicket { get; set; }
@@ -25,4 +25,10 @@ public class Issue : Entity
 
     public List<IssueActivity>? Activities { get; set; }
     public List<Quest>? Quests { get; set; }
+    [NotMapped]
+    public int? CompletionPercent { get{
+        if (Quests == null || Quests.Count == 0) return null;
+        int total = Quests.Count(q => q.Status == QuestStatus.COMPLETED);
+        return total / Quests.Count * 100;
+    } }
 }

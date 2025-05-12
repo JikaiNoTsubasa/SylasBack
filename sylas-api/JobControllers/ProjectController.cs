@@ -17,6 +17,8 @@ public class ProjectController(SyContext context, ProjectManager projectManager,
     protected readonly ProjectManager _projectManager = projectManager;
     protected readonly GlobalParameterManager _globalParameterManager = globalParameterManager;
 
+#region Project
+
     [HttpGet]
     [Route("api/projects")]
     public IActionResult FetchProjects(){
@@ -99,4 +101,14 @@ public class ProjectController(SyContext context, ProjectManager projectManager,
         var res = new ApiResult(){ HttpCode = StatusCodes.Status200OK };
         return Return(res);
     }
+#endregion
+#region Issue
+    [HttpPost]
+    [Route("api/issue")]
+    public IActionResult CreateIssue([FromForm] RequestCreateIssue model){
+        Issue issue = _projectManager.CreateIssue(model.ProjectId, _loggedUserId, model.Name, model.Priority, model.DevelopmentTime, model.Complexity, model.Description, model.DueDate, model.MilestoneId, model.GitlabTicket, model.LabelIds);
+        var res = new ApiResult(){ Content = issue.ToDTO(), HttpCode = StatusCodes.Status201Created };
+        return Return(res);
+    }
+#endregion
 }

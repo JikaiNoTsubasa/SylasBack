@@ -104,6 +104,29 @@ public static class DTOHelper
             Milestone = model.Milestone?.ToDTO(),
             Priority = model.Priority,
             Status = model.Status,
+            CompletionPercent = model.CompletionPercent,
+            Quests = model.Quests?.Select(q => q.ToDTO()).ToList(),
+            Description = model.Description,
+            CreatedDate = model.CreatedDate,
+            UpdatedDate = model.UpdatedDate,
+            DeletedDate = model.DeletedDate,
+            CreatedBy = model.CreatedBy,
+            UpdatedBy = model.UpdatedBy,
+            DeletedBy = model.DeletedBy
+        };
+    }
+
+    public static ResponseQuest ToDTO(this Quest model){
+        return new()
+        {
+            Id = model.Id,
+            Name = model.Name,
+            IsDeleted = model.IsDeleted,
+            Status = model.Status,
+            XPBackEnd = model.XPBackEnd,
+            XPFrontEnd = model.XPFrontEnd,
+            XPTest = model.XPTest,
+            XPManagement = model.XPManagement,
             Description = model.Description,
             CreatedDate = model.CreatedDate,
             UpdatedDate = model.UpdatedDate,

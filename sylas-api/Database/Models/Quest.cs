@@ -20,4 +20,9 @@ public class Quest: Entity
     public int XPBackEnd { get; set; }
     [Range(0, 100)]
     public int XPTest { get; set; }
+    [Range(0, 100)]
+    public int XPManagement { get; set; }
+
+    public QuestStatus Status { get; set; }
+    public string? Description { get; set; }
 }

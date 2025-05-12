@@ -15,6 +15,8 @@ public class ProjectManager(SyContext context) : SyManager(context)
 
     protected ILog log = LogManager.GetLogger(typeof(ProjectManager));
 
+#region Project
+
     private IQueryable<Project> GetProjects(){ return _context.Projects.Include(p => p.Owner).Include(p => p.Customer); }
 
     public ApiResult FetchMyProjectsFiltered( long userId,QueryableEx.Pagination? pagination, QueryableEx.SearchQuery? search, QueryableEx.OrderQuery? order){
@@ -61,7 +63,10 @@ public class ProjectManager(SyContext context) : SyManager(context)
         return GetProjects()
             .Include(p => p.Issues)!.ThenInclude(i => i.Labels)
             .Include(p => p.Issues)!.ThenInclude(i => i.Milestone)
+            .Include(p => p.Issues)!.ThenInclude(i => i.Quests)
             .Include(p => p.Customer)
+            .Include(p => p.Owner)
+            .Include(p => p.Documents)
             .FirstOrDefault(p => p.Id == id)
             ?? throw new SyEntitiyNotFoundException($"Could not find project {id}"); 
     }
@@ -100,4 +105,28 @@ public class ProjectManager(SyContext context) : SyManager(context)
         project.MarkDeleted(deletedBy);
         _context.SaveChanges();
     }
+
+#endregion
+#region Issue
+    public Issue CreateIssue(long projectId, long createdBy, string name, Priority priority, DevelopmentTime devTime, int complexity, string? description = null, DateTime? dueDate = null, long? milestoneId = null, string? gitlabTicket = null, List<long>? labelIds = null){
+        Issue issue = new(){
+            ProjectId = projectId,
+            Name = name,
+            Priority = priority,
+            Complexity = complexity,
+            DevelopmentTime = devTime,
+        };
+        if (description != null) issue.Description = description;
+        if (dueDate != null) issue.DueDate = dueDate.Value;
+        if (milestoneId != null) issue.MilestoneId = milestoneId.Value;
+        if (gitlabTicket != null) issue.GitlabTicket = gitlabTicket;
+        if (labelIds != null){
+            issue.Labels = [.. _context.Labels.Where(l => labelIds.Contains(l.Id))];
+        }
+        issue.MarkCreated(createdBy);
+        _context.Issues.Add(issue);
+        _context.SaveChanges();
+        return issue;
+    }
+#endregion
 }
