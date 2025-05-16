@@ -39,6 +39,7 @@ builder.Services.AddScoped<CustomerManager>();
 builder.Services.AddScoped<GlobalParameterManager>();
 builder.Services.AddScoped<IssueManager>();
 builder.Services.AddScoped<QuestManager>();
+builder.Services.AddScoped<TodoManager>();
 
 // Add policy management
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, GrantPolicyProvider>();

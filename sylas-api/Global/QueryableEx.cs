@@ -6,16 +6,24 @@ namespace sylas_api.Global;
 
 public static class QueryableEx
 {
-    public static IQueryable<T> Paged<T>(this IQueryable<T> query, Pagination? pagination, out PaginationMeta? meta){
-        if (pagination is null || pagination.Limit <=0){
-            meta = new(){
+    public static IQueryable<T> Limit<T>(this IQueryable<T> query, int? limit = null)
+    {
+        return limit is null ? query : query.Take(limit ?? 0);
+    }
+    public static IQueryable<T> Paged<T>(this IQueryable<T> query, Pagination? pagination, out PaginationMeta? meta)
+    {
+        if (pagination is null || pagination.Limit <= 0)
+        {
+            meta = new()
+            {
                 Total = query.Count(),
             };
             meta.PageSize = meta.Total;
             return query;
         }
 
-        meta = new(){
+        meta = new()
+        {
             Page = pagination.Page,
             Limit = pagination.Limit,
             Total = query.Count()
@@ -23,7 +31,7 @@ public static class QueryableEx
 
         query = query.Skip((pagination.Page - 1) * pagination.Limit).Take(pagination.Limit);
         meta.PageSize = query.Count();
-        
+
         return query;
     }
 

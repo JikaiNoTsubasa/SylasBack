@@ -20,6 +20,7 @@ public class SyContext(DbContextOptions<SyContext> options) : DbContext(options)
     public DbSet<GlobalParameter> GlobalParameters { get; set; }
     public DbSet<Document> Documents { get; set; }
     public DbSet<Preferences> Preferences { get; set; }
+    public DbSet<Todo> Todos { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,6 +37,7 @@ public class SyContext(DbContextOptions<SyContext> options) : DbContext(options)
         modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
         modelBuilder.Entity<User>().HasMany(u => u.Times).WithOne(t => t.User);
         modelBuilder.Entity<User>().HasOne(u => u.Preferences).WithOne(p => p.User).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<User>().HasMany(u => u.Todos).WithOne(c => c.Owner).OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Role>().HasMany(r=>r.Grants).WithMany(u=>u.Roles);
 

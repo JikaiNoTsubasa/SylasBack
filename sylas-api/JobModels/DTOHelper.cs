@@ -5,13 +5,14 @@ using sylas_api.JobModels.GlobalParameterModel;
 using sylas_api.JobModels.PreferenceModel;
 using sylas_api.JobModels.ProjectModel;
 using sylas_api.JobModels.TimeModel;
+using sylas_api.JobModels.TodoModel;
 using sylas_api.JobModels.UserModel;
 
 namespace sylas_api.JobModels;
 
 public static class DTOHelper
 {
-#region User
+    #region User
     public static ResponseUser ToDTO(this User model)
     {
         return new()
@@ -47,16 +48,18 @@ public static class DTOHelper
             DeletedBy = model.DeletedBy
         };
     }
-#endregion
+    #endregion
 
-#region Preference
+    #region Preference
     public static ResponsePreference ToDTO(this Preferences model)
     {
-        return new(){
+        return new()
+        {
             Id = model.Id,
             Name = model.Name,
             TimeHistory = model.TimeHistory,
             TimeChartMonth = model.TimeChartMonth,
+            TodoMaxDisplay  = model.TodoMaxDisplay,
             CreatedDate = model.CreatedDate,
             UpdatedDate = model.UpdatedDate,
             DeletedDate = model.DeletedDate,
@@ -65,9 +68,9 @@ public static class DTOHelper
             DeletedBy = model.DeletedBy
         };
     }
-#endregion
+    #endregion
 
-#region Project
+    #region Project
     public static ResponseProject ToDTO(this Project model)
     {
         return new()
@@ -116,7 +119,8 @@ public static class DTOHelper
         };
     }
 
-    public static ResponseQuest ToDTO(this Quest model){
+    public static ResponseQuest ToDTO(this Quest model)
+    {
         return new()
         {
             Id = model.Id,
@@ -160,9 +164,9 @@ public static class DTOHelper
             DeletedBy = model.DeletedBy
         };
     }
-#endregion
+    #endregion
 
-#region Customer
+    #region Customer
     public static ResponseCustomer ToDTO(this Customer model)
     {
         return new()
@@ -177,8 +181,8 @@ public static class DTOHelper
             DeletedBy = model.DeletedBy
         };
     }
-#endregion
-#region Time
+    #endregion
+    #region Time
     public static ResponseTime ToDTO(this DayTime model)
     {
         return new()
@@ -195,9 +199,9 @@ public static class DTOHelper
             DeletedBy = model.DeletedBy
         };
     }
-#endregion
+    #endregion
 
-#region GlobalParameter
+    #region GlobalParameter
     public static ResponseGlobalParameter ToDTO(this GlobalParameter model)
     {
         return new()
@@ -209,5 +213,27 @@ public static class DTOHelper
             Description = model.Description
         };
     }
+    #endregion
+    #region Todo
+    public static ResponseTodo ToDTO(this Todo model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            Name = model.Name,
+            Desciption = model.Drescription,
+            IsDeleted = model.IsDeleted,
+            DueDate = model.DueDate,
+            OwnerId = model.OwnerId,
+            Status = model.Status,
+            CreatedDate = model.CreatedDate,
+            UpdatedDate = model.UpdatedDate,
+            DeletedDate = model.DeletedDate,
+            CreatedBy = model.CreatedBy,
+            UpdatedBy = model.UpdatedBy,
+            DeletedBy = model.DeletedBy
+        };
+    }
+
 #endregion
 }

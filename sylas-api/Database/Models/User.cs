@@ -33,6 +33,7 @@ public class User : Entity
     public List<Project>? OwningProjects { get; set; }
     public List<Quest>? Quests { get; set; }
     public List<DayTime>? Times { get; set; }
+    public List<Todo>? Todos { get; set; }
 
     public Preferences? Preferences { get; set; }
 }
