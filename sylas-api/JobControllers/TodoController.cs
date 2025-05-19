@@ -25,4 +25,11 @@ public class TodoController(SyContext context, TodoManager todoManager) : SyCont
     {
         return Return(new ApiResult() { Content = _todoManager.CreateTodo(_loggedUserId, model.Name, model.Description, model.DueDate).ToDTO(), HttpCode = StatusCodes.Status201Created });
     }
+
+    [HttpPatch]
+    [Route("api/todo/{id}")]
+    public IActionResult UpdateTodo([FromRoute] long id, [FromForm] RequestUpdateTodo model)
+    {
+        return Return(new ApiResult() { Content = _todoManager.UpdateTodo(id, model.Name, model.Description, model.DueDate, model.Status).ToDTO(), HttpCode = StatusCodes.Status200OK });
+    }
 }

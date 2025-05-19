@@ -221,7 +221,7 @@ public static class DTOHelper
         {
             Id = model.Id,
             Name = model.Name,
-            Desciption = model.Drescription,
+            Desciption = model.Description,
             IsDeleted = model.IsDeleted,
             DueDate = model.DueDate,
             OwnerId = model.OwnerId,
