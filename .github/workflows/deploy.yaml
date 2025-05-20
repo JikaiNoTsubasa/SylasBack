@@ -1,4 +1,4 @@
-name: Deploy Sylas Front to VPS
+name: Deploy Sylas Back to VPS
 
 on:
     push:
@@ -42,7 +42,7 @@ jobs:
                   username: ${{ secrets.FTP_USERNAME }}
                   password: ${{ secrets.FTP_PASSWORD }}
                   port: 22
-                  source: 'dist/sylas-front/browser/*'
+                  source: './publish/*'
                   target: '/home/jikai/sylas'
                   strip_components: 3
 
