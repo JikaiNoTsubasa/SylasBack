@@ -21,11 +21,8 @@ jobs:
             - name: Restore dependencies
               run: dotnet restore
 
-            - name: Build (Release)
-              run: dotnet build --configuration Release --no-restore
-
             - name: Publish
-              run: dotnet publish --configuration Release --output ./publish --no-restore
+              run: dotnet publish --output ./publish
 
             - name: Clean remote directory via SSH
               uses: appleboy/ssh-action@v1
