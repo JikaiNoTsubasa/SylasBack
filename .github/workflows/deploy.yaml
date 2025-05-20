@@ -44,7 +44,7 @@ jobs:
                   port: 22
                   source: './publish/*'
                   target: '/home/jikai/sylas'
-                  strip_components: 3
+                  strip_components: 1
 
             - name: Restart sylas service via SSH
               uses: appleboy/ssh-action@v1
