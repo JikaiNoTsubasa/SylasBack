@@ -30,7 +30,7 @@ jobs:
                   host: ${{ secrets.FTP_SERVER }}
                   username: ${{ secrets.FTP_USERNAME }}
                   password: ${{ secrets.FTP_PASSWORD }}
-                  script: rm -rf /home/jikai/sylas/*
+                  script: find /home/jikai/sylas -mindepth 1 -type f ! -name 'appsettings.json' -exec rm -f {} +
 
             - name: Deploy
               uses: appleboy/scp-action@v1
