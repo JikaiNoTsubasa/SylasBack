@@ -5,3 +5,7 @@ sylas-api/obj/
 sylas-api/bin/
 
 Migrations/
+
+lucene/
+
+documents/
