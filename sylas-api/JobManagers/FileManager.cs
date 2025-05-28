@@ -15,10 +15,9 @@ namespace sylas_api.JobManagers;
 public class FileManager(SyContext context) : SyManager(context)
 {
     private const LuceneVersion VERSION = LuceneVersion.LUCENE_48;
-    private readonly string _indexPath = "lucene_index";
-    public void IndexDocument(string title, string content)
+    public void IndexDocument(string title, string content, string lucene_index_path)
     {
-        var dir = FSDirectory.Open(_indexPath);
+        var dir = FSDirectory.Open(lucene_index_path);
         var analyzer = new StandardAnalyzer(VERSION);
         var config = new IndexWriterConfig(VERSION, analyzer);
         using (var writer = new IndexWriter(dir, config))
@@ -33,13 +32,13 @@ public class FileManager(SyContext context) : SyManager(context)
         }
     }
 
-    public List<string> SearchDocuments(string queryText)
+    public List<string> SearchDocuments(string queryText, string lucene_index_path)
     {
-        var dir = FSDirectory.Open(_indexPath);
+        var dir = FSDirectory.Open(lucene_index_path);
         var analyzer = new StandardAnalyzer(VERSION);
         using var reader = DirectoryReader.Open(dir);
         var searcher = new IndexSearcher(reader);
-        var parser = new MultiFieldQueryParser(VERSION, new[] { "title", "content" }, analyzer);
+        var parser = new MultiFieldQueryParser(VERSION, ["title", "content"], analyzer);
         var query = parser.Parse(queryText);
 
         var hits = searcher.Search(query, 10);
@@ -57,5 +56,15 @@ public class FileManager(SyContext context) : SyManager(context)
     {
         using var doc = WordprocessingDocument.Open(filePath, false);
         return doc.MainDocumentPart?.Document.Body?.InnerText ?? "";
+    }
+
+    public string ExtractTextFromTxt(string filePath)
+    {
+        return File.ReadAllText(filePath);
+    }
+
+    public string GetFileExtension(string fileName)
+    {
+        return Path.GetExtension(fileName).TrimStart('.');
     }
 }

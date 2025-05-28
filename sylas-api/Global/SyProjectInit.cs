@@ -52,6 +52,15 @@ public class SyProjectInit
             "string",
             "Storage path for documents"
         );
+
+        // Create param lucene storage path
+        CreateParameterIfNotExist(
+            context,
+            SyApplicationConstants.PARAM_LUCENE_INDEX_PATH,
+            "lucene/index",
+            "string",
+            "Storage path for lucene index"
+        );
     }
 
     public static void CreateParameterIfNotExist(SyContext context, string parameterName, string parameterValue, string parameterType, string? parameterDesc = null){
