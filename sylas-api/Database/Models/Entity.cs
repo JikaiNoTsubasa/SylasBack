@@ -17,8 +17,10 @@ public abstract class Entity
     public long? DeletedBy { get; set; }
 
     public bool IsDeleted { get; set; }
+    public List<Document>? Documents { get; set; }
 
-    public void MarkCreated(long userId){
+    public void MarkCreated(long userId)
+    {
         CreatedDate = DateTime.UtcNow;
         CreatedBy = userId;
     }

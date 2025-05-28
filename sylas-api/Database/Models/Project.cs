@@ -14,6 +14,4 @@ public class Project : Entity
     [ForeignKey(nameof(Customer))]
     public long? CustomerId { get; set; }
     public Customer? Customer { get; set; }
-
-    public List<Document>? Documents { get; set; }
 }

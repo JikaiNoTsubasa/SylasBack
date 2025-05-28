@@ -31,29 +31,31 @@ public class SyContext(DbContextOptions<SyContext> options) : DbContext(options)
         modelBuilder.Entity<Entity>().HasKey(e => e.Id);
         modelBuilder.Entity<Entity>().Property(e => e.Id).ValueGeneratedOnAdd();
 
-        modelBuilder.Entity<User>().HasMany(u=>u.Roles).WithMany(c=>c.Users);
-        modelBuilder.Entity<User>().HasMany(u=>u.Customers).WithMany(c=>c.Members);
-        modelBuilder.Entity<User>().HasMany(u=>u.Quests).WithOne(c=>c.Assignee);
+        modelBuilder.Entity<User>().HasMany(u => u.Roles).WithMany(c => c.Users);
+        modelBuilder.Entity<User>().HasMany(u => u.Customers).WithMany(c => c.Members);
+        modelBuilder.Entity<User>().HasMany(u => u.Quests).WithOne(c => c.Assignee);
         modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
         modelBuilder.Entity<User>().HasMany(u => u.Times).WithOne(t => t.User);
         modelBuilder.Entity<User>().HasOne(u => u.Preferences).WithOne(p => p.User).OnDelete(DeleteBehavior.Cascade);
         modelBuilder.Entity<User>().HasMany(u => u.Todos).WithOne(c => c.Owner).OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Role>().HasMany(r=>r.Grants).WithMany(u=>u.Roles);
+        modelBuilder.Entity<Role>().HasMany(r => r.Grants).WithMany(u => u.Roles);
 
-        modelBuilder.Entity<Project>().HasOne(u=>u.Owner).WithMany(p=>p.OwningProjects);
-        modelBuilder.Entity<Project>().HasMany(p=>p.Issues).WithOne(i=>i.Project);
-        modelBuilder.Entity<Project>().HasOne(p=>p.Customer).WithMany(c=>c.Projects);
-        modelBuilder.Entity<Project>().HasMany(p=>p.Documents).WithOne(c=>c.Project).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<Project>().HasOne(u => u.Owner).WithMany(p => p.OwningProjects);
+        modelBuilder.Entity<Project>().HasMany(p => p.Issues).WithOne(i => i.Project);
+        modelBuilder.Entity<Project>().HasOne(p => p.Customer).WithMany(c => c.Projects);
+        modelBuilder.Entity<Entity>().HasMany(p => p.Documents).WithOne(c => c.Entity).OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Issue>().HasMany(i=>i.Labels).WithMany(l=>l.Issues);
-        modelBuilder.Entity<Issue>().HasOne(m=>m.Milestone).WithMany(i=>i.Issues);
-        modelBuilder.Entity<Issue>().HasMany(i=>i.Activities).WithOne(a=>a.Issue).OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<Issue>().HasMany(i=>i.Quests).WithOne(u=>u.Issue);
+        modelBuilder.Entity<Issue>().HasMany(i => i.Labels).WithMany(l => l.Issues);
+        modelBuilder.Entity<Issue>().HasOne(m => m.Milestone).WithMany(i => i.Issues);
+        modelBuilder.Entity<Issue>().HasMany(i => i.Activities).WithOne(a => a.Issue).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<Issue>().HasMany(i => i.Quests).WithOne(u => u.Issue);
 
-        modelBuilder.Entity<Label>().HasMany(l=>l.Issues).WithMany(i=>i.Labels);
+        modelBuilder.Entity<Label>().HasMany(l => l.Issues).WithMany(i => i.Labels);
 
-        modelBuilder.Entity<Customer>().HasMany(c=>c.Members).WithMany(p=>p.Customers);
+        modelBuilder.Entity<Customer>().HasMany(c => c.Members).WithMany(p => p.Customers);
+        
+        modelBuilder.Entity<Document>().HasMany(d => d.Versions).WithOne(p => p.Document).OnDelete(DeleteBehavior.Cascade);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -24,7 +24,8 @@ public class SyProjectInit
         }
     }
 
-    public static void InitGlobalParameters(SyContext context){
+    public static void InitGlobalParameters(SyContext context)
+    {
         // Create param Bearer expirancy
         CreateParameterIfNotExist(
             context,
@@ -41,6 +42,15 @@ public class SyProjectInit
             "40",
             "int",
             "XP gained when creating a project"
+        );
+
+        // Create param document storage path
+        CreateParameterIfNotExist(
+            context,
+            SyApplicationConstants.PARAM_DOCUMENT_STORAGE_PATH,
+            "documents",
+            "string",
+            "Storage path for documents"
         );
     }
 

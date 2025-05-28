@@ -1,6 +1,7 @@
 using System;
 using sylas_api.Database.Models;
 using sylas_api.Global;
+using sylas_api.JobModels.DocumentModel;
 using sylas_api.JobModels.GlobalParameterModel;
 using sylas_api.JobModels.PreferenceModel;
 using sylas_api.JobModels.ProjectModel;
@@ -59,7 +60,7 @@ public static class DTOHelper
             Name = model.Name,
             TimeHistory = model.TimeHistory,
             TimeChartMonth = model.TimeChartMonth,
-            TodoMaxDisplay  = model.TodoMaxDisplay,
+            TodoMaxDisplay = model.TodoMaxDisplay,
             CreatedDate = model.CreatedDate,
             UpdatedDate = model.UpdatedDate,
             DeletedDate = model.DeletedDate,
@@ -235,5 +236,34 @@ public static class DTOHelper
         };
     }
 
-#endregion
+    #endregion
+    #region Document
+    public static ResponseDocument ToDTO(this Document model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            Name = model.Name,
+            Versions = model.Versions?.Select(v => v.ToDTO()).ToList() ?? [],
+            CurrentVersion = model.CurrentVersion?.ToDTO()!,
+            CreatedDate = model.CreatedDate,
+            UpdatedDate = model.UpdatedDate,
+            DeletedDate = model.DeletedDate,
+            CreatedBy = model.CreatedBy,
+            UpdatedBy = model.UpdatedBy,
+            DeletedBy = model.DeletedBy
+        };
+    }
+
+    public static ResponseDocumentVersion ToDTO(this DocumentVersion model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            Version = model.Version,
+            IsCurrent = model.IsCurrent,
+            Path = model.Path,
+        };
+    }
+    #endregion
 }
