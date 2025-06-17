@@ -20,4 +20,20 @@ public class PlanningManager(SyContext context) : SyManager(context)
     {
         return FetchPlanningForWeek(Engine.GetCurrentWeekNumber(), DateTime.Now.Year);
     }
+
+    public PlanningItem AddPlanningItem(string name, DateTime date, long? userId = null, string? description = null)
+    {
+        var plan = new PlanningItem()
+        {
+            Name = name,
+            Description = description,
+            PlannedDate = date,
+            UserId = userId
+        };
+
+        _context.PlanningItems.Add(plan);
+        _context.SaveChanges();
+        
+        return plan;
+    }
 }

@@ -31,4 +31,12 @@ public class PlanningController(SyContext context, PlanningManager planningManag
         };
         return Return(new ApiResult() { Content = res, HttpCode = StatusCodes.Status200OK });
     }
+
+    [HttpPost]
+    [Route("api/planning/add")]
+    public IActionResult AddPlanningItem([FromForm] RequestCreatePlanningItem model)
+    {
+        var plan = _planningManager.AddPlanningItem(model.Name, model.PlannedDate, model.UserId, model.Description);
+        return Return(new ApiResult() { Content = plan.ToDTO(), HttpCode = StatusCodes.Status200OK });
+    }
 }
