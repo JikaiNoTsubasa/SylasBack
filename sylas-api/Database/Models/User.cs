@@ -36,4 +36,6 @@ public class User : Entity
     public List<Todo>? Todos { get; set; }
 
     public Preferences? Preferences { get; set; }
+
+    public List<PlanningItem>? PlanningItems { get; set; }
 }

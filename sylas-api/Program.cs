@@ -42,6 +42,7 @@ builder.Services.AddScoped<QuestManager>();
 builder.Services.AddScoped<TodoManager>();
 builder.Services.AddScoped<FileManager>();
 builder.Services.AddScoped<DocumentManager>();
+builder.Services.AddScoped<PlanningManager>();
 
 // Add policy management
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, GrantPolicyProvider>();

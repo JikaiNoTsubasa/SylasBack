@@ -1,0 +1,34 @@
+using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using sylas_api.Database;
+using sylas_api.Global;
+using sylas_api.JobManagers;
+using sylas_api.JobModels;
+using sylas_api.JobModels.PlanningModel;
+
+namespace sylas_api.JobControllers;
+
+[Authorize]
+public class PlanningController(SyContext context, PlanningManager planningManager) : SyController(context)
+{
+    private readonly PlanningManager _planningManager = planningManager;
+
+    [HttpGet]
+    [Route("api/currentplannings")]
+    public IActionResult FetchCurrentWeekPlanning()
+    {
+        var week = Engine.GetCurrentWeekNumber();
+        var year = DateTime.Now.Year;
+        (DateTime fist, DateTime last) = Engine.GetFirstAndLastDayOfWeek(year, week);
+        var res = new ResponsePlanningWeek()
+        {
+            Week = week,
+            Year = year,
+            StartDate = fist,
+            EndDate = last,
+            PlanningItems = [.. _planningManager.FetchCurrentWeekPlanning().Select(p => p.ToDTO())]
+        };
+        return Return(new ApiResult() { Content = res, HttpCode = StatusCodes.Status200OK });
+    }
+}

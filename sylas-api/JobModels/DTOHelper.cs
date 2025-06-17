@@ -3,6 +3,7 @@ using sylas_api.Database.Models;
 using sylas_api.Global;
 using sylas_api.JobModels.DocumentModel;
 using sylas_api.JobModels.GlobalParameterModel;
+using sylas_api.JobModels.PlanningModel;
 using sylas_api.JobModels.PreferenceModel;
 using sylas_api.JobModels.ProjectModel;
 using sylas_api.JobModels.TimeModel;
@@ -265,5 +266,25 @@ public static class DTOHelper
             Path = model.Path,
         };
     }
+    #endregion
+    #region Planning
+    public static ResponsePlanningItem ToDTO(this PlanningItem model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            User = model.User?.ToDTO()!,
+            Name = model.Name,
+            Description = model.Description,
+            PlannedDate = model.PlannedDate,
+            CreatedDate = model.CreatedDate,
+            UpdatedDate = model.UpdatedDate,
+            DeletedDate = model.DeletedDate,
+            CreatedBy = model.CreatedBy,
+            UpdatedBy = model.UpdatedBy,
+            DeletedBy = model.DeletedBy
+        };
+    }
+
     #endregion
 }

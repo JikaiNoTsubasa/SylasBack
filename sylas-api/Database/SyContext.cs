@@ -21,6 +21,7 @@ public class SyContext(DbContextOptions<SyContext> options) : DbContext(options)
     public DbSet<Document> Documents { get; set; }
     public DbSet<Preferences> Preferences { get; set; }
     public DbSet<Todo> Todos { get; set; }
+    public DbSet<PlanningItem> PlanningItems { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -54,8 +55,10 @@ public class SyContext(DbContextOptions<SyContext> options) : DbContext(options)
         modelBuilder.Entity<Label>().HasMany(l => l.Issues).WithMany(i => i.Labels);
 
         modelBuilder.Entity<Customer>().HasMany(c => c.Members).WithMany(p => p.Customers);
-        
+
         modelBuilder.Entity<Document>().HasMany(d => d.Versions).WithOne(p => p.Document).OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<PlanningItem>().HasOne(p=>p.User).WithMany(u=>u.PlanningItems);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
