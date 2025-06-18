@@ -10,4 +10,5 @@ public record class RequestCreatePlanningItem
     public long? UserId { get; set; }
     [Required]
     public DateTime PlannedDate { get; set; }
+    public bool IsPrivate { get; set; } = false;
 }

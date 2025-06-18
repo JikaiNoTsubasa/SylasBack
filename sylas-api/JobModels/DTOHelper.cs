@@ -273,7 +273,8 @@ public static class DTOHelper
         return new()
         {
             Id = model.Id,
-            User = model.User?.ToDTO()!,
+            User = model.User?.ToDTO(),
+            Owner = model.Owner?.ToDTO(),
             Name = model.Name,
             Description = model.Description,
             PlannedDate = model.PlannedDate,

@@ -12,4 +12,8 @@ public class PlanningItem : Entity
     public User? User { get; set; }
 
     public DateTime PlannedDate { get; set; }
+    
+    [ForeignKey(nameof(Owner))]
+    public long? OwnerId { get; set; }
+    public User? Owner { get; set; }
 }

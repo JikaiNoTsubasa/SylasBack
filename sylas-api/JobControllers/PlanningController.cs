@@ -43,7 +43,7 @@ public class PlanningController(SyContext context, PlanningManager planningManag
             Year = year,
             StartDate = fist,
             EndDate = last,
-            PlanningItems = [.. _planningManager.FetchPlanningForWeek(week, year).Select(p => p.ToDTO())]
+            PlanningItems = [.. _planningManager.FetchPlanningForWeek(week, year, _loggedUserId).Select(p => p.ToDTO())]
         };
         return Return(new ApiResult() { Content = res, HttpCode = StatusCodes.Status200OK });
     }
@@ -52,7 +52,7 @@ public class PlanningController(SyContext context, PlanningManager planningManag
     [Route("api/planning")]
     public IActionResult AddPlanningItem([FromForm] RequestCreatePlanningItem model)
     {
-        var plan = _planningManager.AddPlanningItem(model.Name, model.PlannedDate, model.UserId, model.Description);
+        var plan = _planningManager.AddPlanningItem(model.Name, model.PlannedDate, _loggedUserId, model.UserId, model.Description, model.IsPrivate);
         return Return(new ApiResult() { Content = plan.ToDTO(), HttpCode = StatusCodes.Status200OK });
     }
 
@@ -60,7 +60,7 @@ public class PlanningController(SyContext context, PlanningManager planningManag
     [Route("api/planning/{id}")]
     public IActionResult UpdatePlanningItem([FromRoute] long id, [FromForm] RequestUpdatePlanningItem model)
     {
-        var plan = _planningManager.UpdatePlanningItem(id, _loggedUserId, model.Name, model.PlannedDate, model.UserId, model.Description);
+        var plan = _planningManager.UpdatePlanningItem(id, _loggedUserId, model.Name, model.PlannedDate, model.UserId, model.Description, model.IsPrivate);
         return Return(new ApiResult() { Content = plan.ToDTO(), HttpCode = StatusCodes.Status200OK });
     }
 

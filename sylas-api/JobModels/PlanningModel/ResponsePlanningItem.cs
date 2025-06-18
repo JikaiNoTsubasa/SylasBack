@@ -7,5 +7,6 @@ public record class ResponsePlanningItem : ResponseEntity
     public string? Description { get; set; }
     public DateTime PlannedDate { get; set; }
     public ResponseUser? User { get; set; }
+    public ResponseUser? Owner { get; set; }
 
 }
