@@ -59,6 +59,7 @@ public class PlanningManager(SyContext context) : SyManager(context)
         if (userId != null) plan.UserId = userId.Value;
         if (description != null) plan.Description = description;
         if (isPrivate != null && isPrivate.Value == true) plan.OwnerId = loggedId;
+        if (isPrivate != null && isPrivate.Value == false) plan.OwnerId = null;
         plan.MarkUpdated(loggedId);
         _context.SaveChanges();
         return plan;
