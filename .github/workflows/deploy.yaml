@@ -22,7 +22,7 @@ jobs:
               run: dotnet restore
 
             - name: Publish
-              run: dotnet publish --output ./publish
+              run: dotnet publish -c Release --output ./publish
 
             - name: Clean remote directory via SSH
               uses: appleboy/ssh-action@v1
