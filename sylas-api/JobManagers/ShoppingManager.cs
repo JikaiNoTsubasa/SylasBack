@@ -12,6 +12,11 @@ public class ShoppingManager(SyContext context) : SyManager(context)
         return [.. _context.ShoppingLists.Include(s => s.Items).Where(s => s.Status != ShoppingListStatus.DELETED).OrderByDescending(s => s.CreatedAt)];
     }
 
+    public ShoppingList FetchShoppingList(long id)
+    {
+        return _context.ShoppingLists.Find(id) ?? throw new Exception($"Could not find shopping info for id {id}");
+    }
+
     public ShoppingList CreateShoppingList(string name)
     {
         var shopList = new ShoppingList()

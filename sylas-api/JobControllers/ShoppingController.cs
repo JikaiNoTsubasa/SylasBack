@@ -21,6 +21,13 @@ public class ShoppingController(SyContext context, ShoppingManager manager) : Sy
         return Ok(_manager.FetchAllShoppingLists().Select(s => s.ToDTO()));
     }
 
+    [HttpGet]
+    [Route("api/shopping/list/{id}")]
+    public IActionResult FetchAllShoppingLists([FromRoute] long id)
+    {
+        return Ok(_manager.FetchShoppingList(id).ToDTO());
+    }
+
     [HttpPost]
     [Route("api/shopping/list")]
     public IActionResult CreateShoppingList([FromBody] RequestCreateShoppingList model)
