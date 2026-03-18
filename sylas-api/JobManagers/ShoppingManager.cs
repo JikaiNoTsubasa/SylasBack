@@ -17,7 +17,7 @@ public class ShoppingManager(SyContext context) : SyManager(context)
         var shopList = new ShoppingList()
         {
             Name = name,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Status = ShoppingListStatus.NEW
         };
 
