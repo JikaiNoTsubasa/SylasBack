@@ -2,7 +2,7 @@ using System;
 
 namespace sylas_api.JobModels.ShoppingModel;
 
-public class ResponseShoppingList
+public record ResponseShoppingList
 {
     public long Id { get; set; }
     public string? Name { get; set; }

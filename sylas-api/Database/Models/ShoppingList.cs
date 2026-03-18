@@ -11,4 +11,5 @@ public class ShoppingList
     public DateTime CreatedAt { get; set; }
 
     public List<ShoppingListItem>? Items { get; set; }
+    public ShoppingListStatus Status { get; set; }
 }

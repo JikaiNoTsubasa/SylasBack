@@ -9,6 +9,34 @@ public class ShoppingManager(SyContext context) : SyManager(context)
 {
     public List<ShoppingList> FetchAllShoppingLists()
     {
-        return [.. _context.ShoppingLists.Include(s => s.Items).OrderByDescending(s => s.CreatedAt)];
+        return [.. _context.ShoppingLists.Include(s => s.Items).Where(s => s.Status != ShoppingListStatus.DELETED).OrderByDescending(s => s.CreatedAt)];
+    }
+
+    public ShoppingList CreateShoppingList(string name)
+    {
+        var shopList = new ShoppingList()
+        {
+            Name = name,
+            CreatedAt = DateTime.Now,
+            Status = ShoppingListStatus.NEW
+        };
+
+        _context.ShoppingLists.Add(shopList);
+        _context.SaveChanges();
+
+        return shopList;
+    }
+
+    public void DeleteShoppingList(long id)
+    {
+        var list = _context.ShoppingLists.FirstOrDefault(s => s.Id == id) ?? throw new Exception($"Could not find shopping list id {id}");
+        list.Status = ShoppingListStatus.DELETED;
+        if (list.Items != null && list.Items.Count > 0)
+        {
+            foreach(var it in list.Items)
+            {
+                it.Status = ShoppingListItemStatus.DELETED;
+            }
+        }
     }
 }
