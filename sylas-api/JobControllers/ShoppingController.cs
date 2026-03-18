@@ -30,7 +30,7 @@ public class ShoppingController(SyContext context, ShoppingManager manager) : Sy
 
     [HttpDelete]
     [Route("api/shopping/list/{id}")]
-    public IActionResult CreateShoppingList([FromRoute] long id)
+    public IActionResult DeleteShoppingList([FromRoute] long id)
     {
         _manager.DeleteShoppingList(id);
         return NoContent();
