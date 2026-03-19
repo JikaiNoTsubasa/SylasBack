@@ -14,6 +14,8 @@ public class ShoppingController(SyContext context, ShoppingManager manager) : Sy
 
     protected ShoppingManager _manager = manager;
 
+    #region Shopping List
+
     [HttpGet]
     [Route("api/shopping/list")]
     public IActionResult FetchAllShoppingLists()
@@ -42,4 +44,22 @@ public class ShoppingController(SyContext context, ShoppingManager manager) : Sy
         _manager.DeleteShoppingList(id);
         return NoContent();
     }
+
+    #endregion
+
+    #region Item
+    [HttpGet]
+    [Route("api/shopping/list/{id}/item")]
+    public IActionResult FetchAllShoppingListItems([FromRoute] long id)
+    {
+        return Ok(_manager.FecthShoppingListItems(id)?.Select(s => s.ToDTO()) ?? []);
+    }
+
+    [HttpPost]
+    [Route("api/shopping/list/{id}/item")]
+    public IActionResult CreateShoppingListItem([FromRoute] long id, [FromBody] RequestCreateShoppingListItem model)
+    {
+        return Ok(_manager.CreateShoppingListItem(id, model.Name, model.Quantity));
+    }
+    #endregion
 }

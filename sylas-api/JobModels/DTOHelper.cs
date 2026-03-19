@@ -299,6 +299,18 @@ public static class DTOHelper
             Name = model.Name,
             CreatedAt = model.CreatedAt,
             ItemsCount = model.Items?.Count ?? 0,
+            Status = model.Status
+        };
+    }
+
+    public static ResponseShoppingListItem ToDTO(this ShoppingListItem model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            Name = model.Name,
+            Quantity = model.Quantity,
+            Status = model.Status
         };
     }
     #endregion

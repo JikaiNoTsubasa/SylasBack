@@ -44,4 +44,24 @@ public class ShoppingManager(SyContext context) : SyManager(context)
             }
         }
     }
+
+    public List<ShoppingListItem>? FecthShoppingListItems(long shoppingListId)
+    {
+        var list = _context.ShoppingLists.Include(s => s.Items!.Where(a => a.Status != ShoppingListItemStatus.DELETED)).FirstOrDefault(s => s.Id == shoppingListId && s.Status != ShoppingListStatus.DELETED) ?? throw new Exception($"Could not find shopping list {shoppingListId}");
+
+        return list.Items;
+    }
+
+    public ShoppingListItem CreateShoppingListItem(long shoppingListId, string name, int quantity)
+    {
+        var list = _context.ShoppingLists.Include(s => s.Items).FirstOrDefault(s => s.Id == shoppingListId) ?? throw new Exception($"Could not find shopping list {shoppingListId}");
+        ShoppingListItem item = new()
+        {
+            Name = name,
+            Quantity = quantity
+        };
+        list.Items!.Add(item);
+        _context.SaveChanges();
+        return item;
+    }
 }
