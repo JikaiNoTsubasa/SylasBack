@@ -99,7 +99,7 @@ public class ShoppingManager(SyContext context) : SyManager(context)
     public void DeleteShoppingListItem(long id)
     {
         var item = _context.ShoppingListItems.FirstOrDefault(s => s.Id == id) ?? throw new Exception($"Could not find shopping item {id}");
-        _context.ShoppingListItems.Remove(item);
+        item.Status = ShoppingListItemStatus.DELETED;
         _context.SaveChanges();
     }
 }
