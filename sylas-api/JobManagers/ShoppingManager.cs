@@ -72,4 +72,27 @@ public class ShoppingManager(SyContext context) : SyManager(context)
         _context.SaveChanges();
         return item;
     }
+
+    public ShoppingListItem UpdateShoppingListItem(long id, string? name = null, int? quantity = null, ShoppingListItemStatus? status = null)
+    {
+        var item = _context.ShoppingListItems.FirstOrDefault(s => s.Id == id) ?? throw new Exception($"Could not find shopping item {id}");
+        if (name != null)
+        {
+            item.Name = name;
+        }
+
+        if (status != null)
+        {
+            item.Status = status ?? ShoppingListItemStatus.NEW;
+        }
+
+        if (quantity != null)
+        {
+            item.Quantity = quantity ?? 1;
+        }
+
+        _context.SaveChanges();
+
+        return item;
+    }
 }
