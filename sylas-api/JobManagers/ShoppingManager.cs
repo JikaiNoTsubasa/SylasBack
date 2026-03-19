@@ -43,6 +43,7 @@ public class ShoppingManager(SyContext context) : SyManager(context)
                 it.Status = ShoppingListItemStatus.DELETED;
             }
         }
+        _context.SaveChanges();
     }
 
     public ShoppingList UpdateShoppingList(long id, string name)
