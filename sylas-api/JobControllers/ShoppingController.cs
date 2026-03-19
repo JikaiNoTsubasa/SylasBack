@@ -45,6 +45,13 @@ public class ShoppingController(SyContext context, ShoppingManager manager) : Sy
         return NoContent();
     }
 
+    [HttpPut]
+    [Route("api/shopping/list/{id}")]
+    public IActionResult UpdateShoppingList([FromRoute] long id, [FromBody] RequestUpdateShoppingList model)
+    {
+        return Ok(_manager.UpdateShoppingList(id, model.Name).ToDTO());
+    }
+
     #endregion
 
     #region Item
