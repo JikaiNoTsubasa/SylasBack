@@ -75,5 +75,13 @@ public class ShoppingController(SyContext context, ShoppingManager manager) : Sy
     {
         return Ok(_manager.UpdateShoppingListItem(id, model.Name, model.Quantity, model.Status));
     }
+
+    [HttpDelete]
+    [Route("api/shopping/list/{id}/item")]
+    public IActionResult DeleteShoppingListItem([FromRoute] long id)
+    {
+        _manager.DeleteShoppingListItem(id);
+        return NoContent();
+    }
     #endregion
 }

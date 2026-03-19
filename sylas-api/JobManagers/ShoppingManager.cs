@@ -55,7 +55,7 @@ public class ShoppingManager(SyContext context) : SyManager(context)
 
     public List<ShoppingListItem>? FecthShoppingListItems(long shoppingListId)
     {
-        var list = _context.ShoppingLists.Include(s => s.Items!.Where(a => a.Status != ShoppingListItemStatus.DELETED)).FirstOrDefault(s => s.Id == shoppingListId && s.Status != ShoppingListStatus.DELETED) ?? throw new Exception($"Could not find shopping list {shoppingListId}");
+        var list = _context.ShoppingLists.Include(s => s.Items!.Where(a => a.Status != ShoppingListItemStatus.DELETED).OrderByDescending(s => s.Id)).FirstOrDefault(s => s.Id == shoppingListId && s.Status != ShoppingListStatus.DELETED) ?? throw new Exception($"Could not find shopping list {shoppingListId}");
 
         return list.Items;
     }
@@ -94,5 +94,12 @@ public class ShoppingManager(SyContext context) : SyManager(context)
         _context.SaveChanges();
 
         return item;
+    }
+
+    public void DeleteShoppingListItem(long id)
+    {
+        var item = _context.ShoppingListItems.FirstOrDefault(s => s.Id == id) ?? throw new Exception($"Could not find shopping item {id}");
+        _context.ShoppingListItems.Remove(item);
+        _context.SaveChanges();
     }
 }
