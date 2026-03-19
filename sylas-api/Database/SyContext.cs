@@ -24,6 +24,8 @@ public class SyContext(DbContextOptions<SyContext> options) : DbContext(options)
     public DbSet<PlanningItem> PlanningItems { get; set; }
     public DbSet<ShoppingList> ShoppingLists { get; set; }
     public DbSet<ShoppingListItem> ShoppingListItems { get; set; }
+    public DbSet<TaskList> TaskLists { get; set; }
+    public DbSet<TaskListItem> TaskListItems { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

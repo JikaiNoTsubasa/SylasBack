@@ -7,6 +7,7 @@ using sylas_api.JobModels.PlanningModel;
 using sylas_api.JobModels.PreferenceModel;
 using sylas_api.JobModels.ProjectModel;
 using sylas_api.JobModels.ShoppingModel;
+using sylas_api.JobModels.TaskModel;
 using sylas_api.JobModels.TimeModel;
 using sylas_api.JobModels.TodoModel;
 using sylas_api.JobModels.UserModel;
@@ -310,6 +311,31 @@ public static class DTOHelper
             Id = model.Id,
             Name = model.Name,
             Quantity = model.Quantity,
+            Status = model.Status
+        };
+    }
+    #endregion
+
+    #region Task
+    public static ResponseTaskList ToDTO(this TaskList model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            Name = model.Name,
+            CreatedAt = model.CreatedAt,
+            ItemsCount = model.Items?.Count ?? 0,
+            Status = model.Status
+        };
+    }
+
+    public static ResponseTaskListItem ToDTO(this TaskListItem model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            Name = model.Name,
+            Description = model.Description,
             Status = model.Status
         };
     }
