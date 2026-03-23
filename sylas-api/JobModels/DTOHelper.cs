@@ -357,11 +357,13 @@ public static class DTOHelper
         };
     }
 
-    public static ResponseFamilyTask ToDTO(this FamilyTask model, DateTime today)
+    public static ResponseFamilyTask ToDTO(this FamilyTask model, DateTime today, long? memberId = null)
     {
         bool isDoneToday = !model.IsRecurring
             ? model.Status == FamilyTaskStatus.Done
-            : model.Completions?.Any(c => c.CompletedDate.Date == today) ?? false;
+            : model.Completions?.Any(c =>
+                c.CompletedDate.Date == today &&
+                (memberId == null || c.MemberId == memberId)) ?? false;
 
         return new()
         {

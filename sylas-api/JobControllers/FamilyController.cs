@@ -63,7 +63,7 @@ public class FamilyController(SyContext context, FamilyManager familyManager) : 
         var tasks = _familyManager.FetchTasks(memberId, timeOfDay, today);
         return Return(new ApiResult
         {
-            Content = tasks.Select(t => t.ToDTO(today)).ToList(),
+            Content = tasks.Select(t => t.ToDTO(today, memberId)).ToList(),
             HttpCode = StatusCodes.Status200OK
         });
     }
@@ -109,16 +109,26 @@ public class FamilyController(SyContext context, FamilyManager familyManager) : 
     [Route("api/family/task/{taskId}/complete/{memberId}")]
     public IActionResult CompleteTask([FromRoute] long taskId, [FromRoute] long memberId)
     {
-        var task = _familyManager.CompleteTask(taskId, memberId);
-        return Return(new ApiResult { Content = task.ToDTO(DateTime.UtcNow.Date), HttpCode = StatusCodes.Status200OK });
+        var today = DateTime.UtcNow.Date;
+        var (task, member) = _familyManager.CompleteTask(taskId, memberId);
+        return Return(new ApiResult
+        {
+            Content = new ResponseCompleteTask { Task = task.ToDTO(today, memberId), Member = member.ToDTO() },
+            HttpCode = StatusCodes.Status200OK
+        });
     }
 
     [HttpDelete]
     [Route("api/family/task/{taskId}/complete/{memberId}")]
     public IActionResult UncompleteTask([FromRoute] long taskId, [FromRoute] long memberId)
     {
-        var task = _familyManager.UncompleteTask(taskId, memberId);
-        return Return(new ApiResult { Content = task.ToDTO(DateTime.UtcNow.Date), HttpCode = StatusCodes.Status200OK });
+        var today = DateTime.UtcNow.Date;
+        var (task, member) = _familyManager.UncompleteTask(taskId, memberId);
+        return Return(new ApiResult
+        {
+            Content = new ResponseCompleteTask { Task = task.ToDTO(today, memberId), Member = member.ToDTO() },
+            HttpCode = StatusCodes.Status200OK
+        });
     }
 
     #endregion

@@ -57,17 +57,19 @@ public class FamilyManager(SyContext context) : SyManager(context)
 
     #region FamilyTask
 
-    private IQueryable<FamilyTask> GetTasks(DateTime? filterDate = null)
+    private IQueryable<FamilyTask> GetTasks(DateTime? filterDate = null, long? memberId = null)
     {
         var day = (filterDate ?? DateTime.UtcNow.Date).Date;
         return _context.FamilyTasks
             .Include(t => t.Assignees)
-            .Include(t => t.Completions!.Where(c => c.CompletedDate.Date == day));
+            .Include(t => t.Completions!.Where(c =>
+                c.CompletedDate.Date == day &&
+                (memberId == null || c.MemberId == memberId)));
     }
 
     public List<FamilyTask> FetchTasks(long? memberId = null, FamilyTaskTimeOfDay? timeOfDay = null, DateTime? date = null)
     {
-        var query = GetTasks(date)
+        var query = GetTasks(date, memberId)
             .Where(t => t.IsRecurring || t.Status != FamilyTaskStatus.Done);
 
         if (memberId != null)
@@ -97,9 +99,9 @@ public class FamilyManager(SyContext context) : SyManager(context)
         _                   => FamilyRecurrenceDay.None
     };
 
-    public FamilyTask FetchTask(long id, DateTime? date = null)
+    public FamilyTask FetchTask(long id, DateTime? date = null, long? memberId = null)
     {
-        return GetTasks(date).FirstOrDefault(t => t.Id == id)
+        return GetTasks(date, memberId).FirstOrDefault(t => t.Id == id)
             ?? throw new Exception($"Could not find family task {id}");
     }
 
@@ -161,7 +163,7 @@ public class FamilyManager(SyContext context) : SyManager(context)
 
     #region Complete / Uncomplete
 
-    public FamilyTask CompleteTask(long taskId, long memberId)
+    public (FamilyTask task, FamilyMember member) CompleteTask(long taskId, long memberId)
     {
         var task = FetchTask(taskId);
         var member = FetchMember(memberId);
@@ -188,10 +190,10 @@ public class FamilyManager(SyContext context) : SyManager(context)
             task.Status = FamilyTaskStatus.Done;
 
         _context.SaveChanges();
-        return FetchTask(taskId);
+        return (FetchTask(taskId, DateTime.UtcNow, memberId), FetchMember(memberId));
     }
 
-    public FamilyTask UncompleteTask(long taskId, long memberId)
+    public (FamilyTask task, FamilyMember member) UncompleteTask(long taskId, long memberId)
     {
         var today = DateTime.UtcNow.Date;
         var completion = _context.FamilyTaskCompletions
@@ -207,7 +209,7 @@ public class FamilyManager(SyContext context) : SyManager(context)
 
         _context.FamilyTaskCompletions.Remove(completion);
         _context.SaveChanges();
-        return FetchTask(taskId);
+        return (FetchTask(taskId, DateTime.UtcNow, memberId), FetchMember(memberId));
     }
 
     #endregion
