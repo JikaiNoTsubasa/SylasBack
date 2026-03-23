@@ -64,7 +64,7 @@ public class FamilyManager(SyContext context) : SyManager(context)
             .Include(t => t.Completions);
     }
 
-    public List<FamilyTask> FetchTasks(long? memberId = null, FamilyTaskTimeOfDay? timeOfDay = null)
+    public List<FamilyTask> FetchTasks(long? memberId = null, FamilyTaskTimeOfDay? timeOfDay = null, DateTime? date = null)
     {
         var query = GetTasks()
             .Where(t => t.IsRecurring || t.Status != FamilyTaskStatus.Done);
@@ -75,8 +75,26 @@ public class FamilyManager(SyContext context) : SyManager(context)
         if (timeOfDay != null)
             query = query.Where(t => t.TimeOfDay == timeOfDay || t.TimeOfDay == FamilyTaskTimeOfDay.AllDay);
 
+        if (date != null)
+        {
+            var dayFlag = (int)MapDayOfWeek(date.Value.DayOfWeek);
+            query = query.Where(t => !t.IsRecurring || ((int)t.RecurrenceDays & dayFlag) != 0);
+        }
+
         return [.. query.OrderBy(t => t.DisplayOrder)];
     }
+
+    private static FamilyRecurrenceDay MapDayOfWeek(DayOfWeek day) => day switch
+    {
+        DayOfWeek.Monday    => FamilyRecurrenceDay.Monday,
+        DayOfWeek.Tuesday   => FamilyRecurrenceDay.Tuesday,
+        DayOfWeek.Wednesday => FamilyRecurrenceDay.Wednesday,
+        DayOfWeek.Thursday  => FamilyRecurrenceDay.Thursday,
+        DayOfWeek.Friday    => FamilyRecurrenceDay.Friday,
+        DayOfWeek.Saturday  => FamilyRecurrenceDay.Saturday,
+        DayOfWeek.Sunday    => FamilyRecurrenceDay.Sunday,
+        _                   => FamilyRecurrenceDay.None
+    };
 
     public FamilyTask FetchTask(long id)
     {

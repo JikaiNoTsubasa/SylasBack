@@ -57,10 +57,10 @@ public class FamilyController(SyContext context, FamilyManager familyManager) : 
 
     [HttpGet]
     [Route("api/family/tasks")]
-    public IActionResult FetchTasks([FromQuery] long? memberId = null, [FromQuery] FamilyTaskTimeOfDay? timeOfDay = null)
+    public IActionResult FetchTasks([FromQuery] long? memberId = null, [FromQuery] FamilyTaskTimeOfDay? timeOfDay = null, [FromQuery] DateOnly? date = null)
     {
-        var today = DateTime.UtcNow.Date;
-        var tasks = _familyManager.FetchTasks(memberId, timeOfDay);
+        var today = date.HasValue ? date.Value.ToDateTime(TimeOnly.MinValue) : DateTime.UtcNow.Date;
+        var tasks = _familyManager.FetchTasks(memberId, timeOfDay, today);
         return Return(new ApiResult
         {
             Content = tasks.Select(t => t.ToDTO(today)).ToList(),
