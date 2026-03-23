@@ -26,6 +26,9 @@ public class SyContext(DbContextOptions<SyContext> options) : DbContext(options)
     public DbSet<ShoppingListItem> ShoppingListItems { get; set; }
     public DbSet<TaskList> TaskLists { get; set; }
     public DbSet<TaskListItem> TaskListItems { get; set; }
+    public DbSet<FamilyMember> FamilyMembers { get; set; }
+    public DbSet<FamilyTask> FamilyTasks { get; set; }
+    public DbSet<FamilyTaskCompletion> FamilyTaskCompletions { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -63,6 +66,10 @@ public class SyContext(DbContextOptions<SyContext> options) : DbContext(options)
         modelBuilder.Entity<Document>().HasMany(d => d.Versions).WithOne(p => p.Document).OnDelete(DeleteBehavior.Cascade);
         
         modelBuilder.Entity<PlanningItem>().HasOne(p=>p.User).WithMany(u=>u.PlanningItems);
+
+        modelBuilder.Entity<FamilyTask>().HasMany(t => t.Assignees).WithMany(m => m.Tasks);
+        modelBuilder.Entity<FamilyTaskCompletion>().HasOne(c => c.Task).WithMany(t => t.Completions).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<FamilyTaskCompletion>().HasOne(c => c.Member).WithMany(m => m.Completions).OnDelete(DeleteBehavior.Cascade);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

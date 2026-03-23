@@ -45,6 +45,7 @@ builder.Services.AddScoped<DocumentManager>();
 builder.Services.AddScoped<PlanningManager>();
 builder.Services.AddScoped<ShoppingManager>();
 builder.Services.AddScoped<TaskManager>();
+builder.Services.AddScoped<FamilyManager>();
 
 // Add policy management
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, GrantPolicyProvider>();

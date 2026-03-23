@@ -2,6 +2,7 @@ using System;
 using sylas_api.Database.Models;
 using sylas_api.Global;
 using sylas_api.JobModels.DocumentModel;
+using sylas_api.JobModels.FamilyModel;
 using sylas_api.JobModels.GlobalParameterModel;
 using sylas_api.JobModels.PlanningModel;
 using sylas_api.JobModels.PreferenceModel;
@@ -337,6 +338,46 @@ public static class DTOHelper
             Name = model.Name,
             Description = model.Description,
             Status = model.Status
+        };
+    }
+    #endregion
+
+    #region Family
+    public static ResponseFamilyMember ToDTO(this FamilyMember model)
+    {
+        return new()
+        {
+            Id = model.Id,
+            Name = model.Name,
+            Avatar = model.Avatar,
+            Color = model.Color,
+            TotalPoints = model.TotalPoints,
+            DisplayOrder = model.DisplayOrder,
+            CreatedAt = model.CreatedAt
+        };
+    }
+
+    public static ResponseFamilyTask ToDTO(this FamilyTask model, DateTime today)
+    {
+        bool isDoneToday = !model.IsRecurring
+            ? model.Status == FamilyTaskStatus.Done
+            : model.Completions?.Any(c => c.CompletedDate.Date == today) ?? false;
+
+        return new()
+        {
+            Id = model.Id,
+            Name = model.Name,
+            Description = model.Description,
+            PointsReward = model.PointsReward,
+            TimeOfDay = model.TimeOfDay,
+            IsRecurring = model.IsRecurring,
+            RecurrenceDays = model.RecurrenceDays,
+            Status = model.Status,
+            IsDoneToday = isDoneToday,
+            DisplayOrder = model.DisplayOrder,
+            DueDate = model.DueDate,
+            CreatedAt = model.CreatedAt,
+            Assignees = model.Assignees?.Select(a => a.ToDTO()).ToList()
         };
     }
     #endregion
