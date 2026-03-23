@@ -57,16 +57,17 @@ public class FamilyManager(SyContext context) : SyManager(context)
 
     #region FamilyTask
 
-    private IQueryable<FamilyTask> GetTasks()
+    private IQueryable<FamilyTask> GetTasks(DateTime? filterDate = null)
     {
+        var day = (filterDate ?? DateTime.UtcNow.Date).Date;
         return _context.FamilyTasks
             .Include(t => t.Assignees)
-            .Include(t => t.Completions);
+            .Include(t => t.Completions!.Where(c => c.CompletedDate.Date == day));
     }
 
     public List<FamilyTask> FetchTasks(long? memberId = null, FamilyTaskTimeOfDay? timeOfDay = null, DateTime? date = null)
     {
-        var query = GetTasks()
+        var query = GetTasks(date)
             .Where(t => t.IsRecurring || t.Status != FamilyTaskStatus.Done);
 
         if (memberId != null)
@@ -96,9 +97,9 @@ public class FamilyManager(SyContext context) : SyManager(context)
         _                   => FamilyRecurrenceDay.None
     };
 
-    public FamilyTask FetchTask(long id)
+    public FamilyTask FetchTask(long id, DateTime? date = null)
     {
-        return GetTasks().FirstOrDefault(t => t.Id == id)
+        return GetTasks(date).FirstOrDefault(t => t.Id == id)
             ?? throw new Exception($"Could not find family task {id}");
     }
 
