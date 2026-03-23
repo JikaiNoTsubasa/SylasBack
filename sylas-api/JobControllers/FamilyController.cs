@@ -59,8 +59,9 @@ public class FamilyController(SyContext context, FamilyManager familyManager) : 
     [Route("api/family/tasks")]
     public IActionResult FetchTasks([FromQuery] long? memberId = null, [FromQuery] FamilyTaskTimeOfDay? timeOfDay = null, [FromQuery] DateTime? date = null)
     {
-        var today = date?.Date ?? DateTime.UtcNow.Date;
-        var tasks = _familyManager.FetchTasks(memberId, timeOfDay, today);
+        var today = DateTime.UtcNow.Date;
+        // Only apply day-of-week filtering when a specific date is requested
+        var tasks = _familyManager.FetchTasks(memberId, timeOfDay, date?.Date);
         return Return(new ApiResult
         {
             Content = tasks.Select(t => t.ToDTO(today, memberId)).ToList(),
@@ -70,10 +71,10 @@ public class FamilyController(SyContext context, FamilyManager familyManager) : 
 
     [HttpGet]
     [Route("api/family/task/{id}")]
-    public IActionResult FetchTask([FromRoute] long id)
+    public IActionResult FetchTask([FromRoute] long id, [FromQuery] long? memberId = null)
     {
-        var task = _familyManager.FetchTask(id);
-        return Return(new ApiResult { Content = task.ToDTO(DateTime.UtcNow.Date), HttpCode = StatusCodes.Status200OK });
+        var task = _familyManager.FetchTask(id, memberId);
+        return Return(new ApiResult { Content = task.ToDTO(DateTime.UtcNow.Date, memberId), HttpCode = StatusCodes.Status200OK });
     }
 
     [HttpPost]
